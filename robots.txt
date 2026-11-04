@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://wowd0t.github.io/Onyx_Meridian_project/sitemap.xml

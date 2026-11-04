@@ -1,103 +1,83 @@
 # Onyx Meridian Interactive Studio
 
-**Gameplay systems for Minecraft Bedrock — engineered to disappear.**
+**English**
 
-This repository hosts the official studio website: a bilingual hub, add-on showcase, and the full documentation wiki for **Gloamguise: False Facades**. The site is built around one idea: an add-on should feel like part of the vanilla game, and its documentation should feel like part of the add-on.
+Onyx Meridian Interactive Studio is an independent studio building gameplay systems for Minecraft Bedrock. This repository is the studio's main home: the public website, shared legal documents, official-source rules, notification centre, support form and studio-level documentation.
 
-## The studio
+The studio publishes add-ons as separate projects. Each add-on has its own page on the website, its own GitHub repository and its own GitHub Wiki. The studio repository connects those projects; it does not replace them.
 
-Onyx Meridian Interactive Studio is an independent team building gameplay systems for Minecraft Bedrock — not one-off texture packs. We care about deep mechanics, honest engineering, and a seamless vanilla aesthetic. Gloamguise is the studio’s first release.
+## What lives here
 
-## Gloamguise: False Facades
+- The static studio website for GitHub Pages.
+- The studio hub: add-on catalogue, official sources, announcements, notifications, licensing and support.
+- The shared **OM Studio EULA v3.1** in English, Russian and combined form.
+- A bilingual support and permission-request form delivered through FormSubmit.
+- Studio-wide documentation about official channels, repositories, permissions and releases.
 
-Gloamguise lets players build undetectable secret bases in Minecraft Bedrock:
+## Official GitHub destinations
 
-- **Decoy Block** — a pass-through ghost wall that copies texture faces, log axis, biome tint, block sounds, and real light level.
-- **Decoy Spy Glass** — a one-way window: solid from the corridor, clear from inside, with two in-hand modes.
-- **Decoy Doors & Trapdoors** — flush camouflage doors and hatches, including hand-locked redstone variants.
-- **Torch Levers** — switches that look exactly like vanilla torches; wired ones output power 15, wireless ones output nothing and open a linked door through walls.
+- Studio website: https://wowd0t.github.io/Onyx_Meridian_project/
+- Studio Wiki: https://github.com/WowD0t/Onyx_Meridian_project/wiki/Home
+- Add-on repository: https://github.com/WowD0t/Gloamguise-False-Facades
+- Add-on Wiki: https://github.com/WowD0t/Gloamguise-False-Facades/wiki/Home
 
-The pack ships as one `.mcaddon` containing both the behaviour pack and the resource pack. It targets Bedrock 1.26.40+, requires no experimental toggles, and works in survival, Realms, and servers.
+Everything published by the GitHub account **WowD0t** — repositories, Wikis, releases, files and Pages — is an official source. Every studio-controlled site under `wowd0t.github.io` is official. Other public channels include the CurseForge profile and the VK community.
 
-## What the website includes
+## Licence
 
-- **Studio hub** — the entry point, studio identity, and add-on catalogue.
-- **Add-on page** — overview, live GIFs, item catalogue, specifications, and the official download panel.
-- **Full wiki** — 17 documentation pages per language covering mechanics, crafting, redstone, survival, installation, compatibility, limitations, FAQ, changelog, and licence.
-- **Search** — full-text search across the whole wiki, opened with `Ctrl+K` or `/`.
-- **Themes & languages** — dark and light themes, English primary with an official Russian translation, both remembered between visits.
-- **Reading comfort** — scroll-spy table of contents, reading progress, heading anchors, image lightbox, click-to-copy block IDs, and responsive layout down to phones.
+All studio works are governed by **OM Studio EULA v3.1** unless a separate written licence says otherwise. English is authoritative; Russian is an official translation. The licence lists only three public reference links: the studio website, the CurseForge profile and the VK community.
 
-## Documentation
+- `LICENSE-EN.md` — English text.
+- `LICENSE-RU.md` — official Russian translation.
+- `LICENSE.md` — combined English + Russian document.
+- Website licence page: https://wowd0t.github.io/Onyx_Meridian_project/license.html
 
-The wiki is distributed as flat Markdown files with no folders. Each page contains the English documentation first, followed by the official Russian translation. Start with [Home](Home.md) or [Quick start](quick-start.md).
+Permissions for bundles, mirrors, group uploads, translations, ports, commercial use and other restricted acts require written permission from the rights holder. Silence is not approval.
 
-## Download
+## Support
 
-The original, unmodified `.mcaddon` is distributed through two official channels:
-
-1. **This website** — direct download from the add-on page.
-2. **CurseForge** — the project page and file history: <https://www.curseforge.com/minecraft-bedrock/addons/gloamguise-false-facades>.
-
-No third-party mirrors, re-uploads, bundles, paywalls, or shorteners are authorised.
-
-## Licence and contact
-
-Site text and images belong to Onyx Meridian Interactive Studio / WowDot. Gloamguise itself is distributed under the OM Studio EULA v3.0; the rights holder has designated this website and CurseForge as official distribution channels. See the [Licence page](license.md) for usage rights.
-
-Contact: <yarik.internet@atomicmail.io> · [CurseForge](https://www.curseforge.com/members/wowdot)
-
-Minecraft is a trademark of Mojang Studios. This project is not affiliated with, endorsed by, or sponsored by Mojang Studios or Microsoft.
+- English support form: https://wowd0t.github.io/Onyx_Meridian_project/en/support.html
+- Russian support form: https://wowd0t.github.io/Onyx_Meridian_project/ru/support.html
+- Licensing e-mail: yarik.internet@atomicmail.io
 
 ---
 
 ## Официальный русский перевод
 
-**Игровые системы для Minecraft Bedrock — созданные исчезать.**
+Onyx Meridian Interactive Studio — независимая студия, создающая игровые системы для Minecraft Bedrock. Этот репозиторий является главным домом студии: публичный сайт, общие юридические документы, правила официальных источников, центр уведомлений, форма поддержки и документация уровня студии.
 
-Этот репозиторий содержит официальный сайт студии: двуязычный хаб, витрину аддонов и полную документационную вики для **Gloamguise: False Facades**. Сайт построен вокруг одной идеи: аддон должен ощущаться частью ванильной игры, а его документация — частью аддона.
+Студия публикует аддоны как отдельные проекты. У каждого аддона есть своя страница на сайте, свой репозиторий GitHub и своя вики GitHub. Репозиторий студии связывает эти проекты; он не заменяет их.
 
-## Студия
+## Что находится здесь
 
-Onyx Meridian Interactive Studio — независимая команда, создающая игровые системы для Minecraft Bedrock, а не одноразовые текстур-паки. Нам важны глубокие механики, честная инженерия и бесшовная ванильная эстетика. Gloamguise — первый релиз студии.
+- Статический сайт студии для GitHub Pages.
+- Хаб студии: каталог аддонов, официальные источники, анонсы, уведомления, лицензия и поддержка.
+- Общая **OM Studio EULA v3.1** на английском, русском и в объединённом виде.
+- Двуязычная форма поддержки и запросов разрешений с доставкой через FormSubmit.
+- Документация студии об официальных каналах, репозиториях, разрешениях и релизах.
 
-## Gloamguise: False Facades
+## Официальные места GitHub
 
-Gloamguise позволяет строить необнаруживаемые секретные базы в Minecraft Bedrock:
+- Сайт студии: https://wowd0t.github.io/Onyx_Meridian_project/
+- Wiki студии: https://github.com/WowD0t/Onyx_Meridian_project/wiki/Home
+- Репозиторий аддона: https://github.com/WowD0t/Gloamguise-False-Facades
+- Wiki аддона: https://github.com/WowD0t/Gloamguise-False-Facades/wiki/Home
 
-- **Маскировочный блок** — проходимая призрачная стена, копирующая грани текстур, ось брёвен, оттенок биома, звуки блока и реальный уровень света.
-- **Смотровое стекло** — одностороннее окно: сплошное со стороны коридора, прозрачное изнутри, с двумя режимами в руке.
-- **Маскировочные двери и люки** — утопленные камуфляжные двери и люки, включая запираемые редстоун-варианты.
-- **Факелы-рычаги** — переключатели, выглядящие как ванильные факелы; проводные дают силу 15, беспроводные не дают сигнал и открывают привязанную дверь сквозь стены.
+Всё, что выпущено GitHub-аккаунтом **WowD0t** — репозитории, Wiki, релизы, файлы и Pages — является официальным источником. Каждый сайт в `wowd0t.github.io` под контролем студии является официальным. Другие публичные каналы включают профиль CurseForge и сообщество VK.
 
-Пак поставляется одним `.mcaddon`, содержащим пак поведения и пак ресурсов. Он рассчитан на Bedrock 1.26.40+, не требует экспериментальных переключателей и работает в выживании, Realms и на серверах.
+## Лицензия
 
-## Что включает сайт
+Все Работы студии регулируются **OM Studio EULA v3.1**, если отдельная письменная лицензия не устанавливает иное. Английский текст имеет силу; русский — официальный перевод. Лицензия перечисляет только три публичные справочные ссылки: сайт студии, профиль CurseForge и сообщество VK.
 
-- **Хаб студии** — точка входа, идентичность студии и каталог аддонов.
-- **Страница аддона** — обзор, живые GIF, каталог предметов, спецификации и официальная панель загрузки.
-- **Полная вики** — 17 страниц документации на каждом языке: механики, крафт, редстоун, выживание, установка, совместимость, ограничения, FAQ, история версий и лицензия.
-- **Поиск** — полнотекстовый поиск по всей вики, открывается `Ctrl+K` или `/`.
-- **Темы и языки** — тёмная и светлая темы, английский как основной язык и официальный русский перевод, оба запоминаются между визитами.
-- **Комфорт чтения** — оглавление со scroll-spy, прогресс чтения, якоря заголовков, лайтбокс изображений, копирование ID блоков в один клик и адаптив до телефонов.
+- `LICENSE-EN.md` — английский текст.
+- `LICENSE-RU.md` — официальный русский перевод.
+- `LICENSE.md` — объединённый документ EN + RU.
+- Страница лицензии на сайте: https://wowd0t.github.io/Onyx_Meridian_project/license.html
 
-## Документация
+Разрешения на сборки, зеркала, загрузки в группы, переводы, порты, коммерческое использование и другие ограниченные действия требуют письменного разрешения правообладателя. Молчание не является согласием.
 
-Вики распространяется плоскими Markdown-файлами без папок. Каждая страница содержит сначала английскую документацию, затем официальный русский перевод. Начните с [Главной](Home.md) или [Быстрого старта](quick-start.md).
+## Поддержка
 
-## Загрузка
-
-Оригинальный неизменённый `.mcaddon` распространяется через два официальных канала:
-
-1. **Этот сайт** — прямая загрузка со страницы аддона.
-2. **CurseForge** — страница проекта и история файлов: <https://www.curseforge.com/minecraft-bedrock/addons/gloamguise-false-facades>.
-
-Сторонние зеркала, повторные загрузки, сборки, платные стены и сокращатели ссылок не разрешены.
-
-## Лицензия и контакт
-
-Тексты и изображения сайта принадлежат Onyx Meridian Interactive Studio / WowDot. Сам Gloamguise распространяется под OM Studio EULA v3.0; правообладатель определил этот сайт и CurseForge как официальные каналы распространения. Права использования смотрите на [странице лицензии](license.md).
-
-Контакт: <yarik.internet@atomicmail.io> · [CurseForge](https://www.curseforge.com/members/wowdot)
-
-Minecraft — товарный знак Mojang Studios. Этот проект не аффилирован, не одобрен и не спонсируется Mojang Studios или Microsoft.
+- Английская форма поддержки: https://wowd0t.github.io/Onyx_Meridian_project/en/support.html
+- Русская форма поддержки: https://wowd0t.github.io/Onyx_Meridian_project/ru/support.html
+- Почта по лицензиям: yarik.internet@atomicmail.io
