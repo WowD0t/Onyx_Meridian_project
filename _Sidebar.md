@@ -1,0 +1,41 @@
+# Gloamguise Wiki
+
+**English**
+
+- [Home](Home.md)
+- [Quick Start](quick-start.md)
+- [Engine](engine.md)
+- [Decoy Block](decoy-block.md)
+- [Spy Glass](spy-glass.md)
+- [Doors](doors.md)
+- [Trapdoors](trapdoors.md)
+- [Torch Levers](torch-levers.md)
+- [Recipes](recipes.md)
+- [Redstone](redstone.md)
+- [Survival](survival.md)
+- [Installation](installation.md)
+- [Compatibility](compatibility.md)
+- [Limitations](limitations.md)
+- [Faq](faq.md)
+- [Changelog](changelog.md)
+- [License](license.md)
+
+**Русский**
+
+- [Главная](Home.md)
+- [Быстрый старт](quick-start.md)
+- [Движок камуфляжа](engine.md)
+- [Маскировочный блок](decoy-block.md)
+- [Смотровое стекло](spy-glass.md)
+- [Маскировочные двери](doors.md)
+- [Маскировочные люки](trapdoors.md)
+- [Факелы-рычаги](torch-levers.md)
+- [Все десять рецептов](recipes.md)
+- [Редстоун и беспроводная связь](redstone.md)
+- [Выживание и производительность](survival.md)
+- [Установка и первая помощь](installation.md)
+- [Совместимость](compatibility.md)
+- [Честные ограничения](limitations.md)
+- [Частые вопросы](faq.md)
+- [История версий](changelog.md)
+- [Лицензия и права](license.md)
