@@ -38,9 +38,7 @@ function moveSel(d){var items=resultsBox.querySelectorAll('.search-result');if(!
 if(overlay&&input){document.addEventListener('click',function(e){if(e.target.closest('[data-search-open]')){e.preventDefault();openSearch();}
 if(e.target===overlay)closeSearch();});input.addEventListener('input',function(){render(input.value);});input.addEventListener('keydown',function(e){if(e.key==='ArrowDown'){e.preventDefault();moveSel(1);}
 else if(e.key==='ArrowUp'){e.preventDefault();moveSel(-1);}
-else if(e.key==='Enter'){var items=resultsBox.querySelectorAll('.search-result');var target=items[sel>=0?sel:0];if(target){closeSearch();navigate(target.getAttribute('href'));}}});document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();overlay.classList.contains('open')?closeSearch():openSearch();}
-else if(e.key==='/'&&!overlay.classList.contains('open')&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='TEXTAREA'){e.preventDefault();openSearch();}
-else if(e.key==='Escape')closeSearch();});}})();(function(){var hs=document.querySelectorAll(".wiki-body h2[id],.wiki-body h3[id]");Array.prototype.forEach.call(hs,function(h){var a=document.createElement("a");a.className="h-anchor";a.href="#"+h.id;a.textContent="#";a.setAttribute("aria-label","Link to section");h.appendChild(a);});})();
+else if(e.key==='Enter'){var items=resultsBox.querySelectorAll('.search-result');var target=items[sel>=0?sel:0];if(target){closeSearch();navigate(target.getAttribute('href'));}}});document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSearch();});}})();
 (function(){
 if(window.__omV4){return}
 window.__omV4=1;

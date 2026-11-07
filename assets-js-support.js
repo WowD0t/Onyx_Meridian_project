@@ -2,16 +2,19 @@
   var form = document.getElementById('support-form');
   if (!form) return;
   var lang = document.documentElement.getAttribute('data-lang') === 'ru' ? 'ru' : 'en';
+  var cfg = window.OM_FORM || {};
   var S = {
     en: {
       required: 'Please complete the required fields correctly.',
-      bademail: 'Enter a valid reply e-mail address.',
+      bademail: 'Enter a valid reply email address.',
       minmessage: 'Please describe the request in at least 20 characters.',
       sending: 'Sending…',
       send: 'Send request',
       subject: 'Onyx Meridian support request',
       bodyIntro: 'Onyx Meridian support request',
-      chars: 'characters'
+      ok: 'Request sent successfully.',
+      fail: 'Could not send the request. Try again or use the email app button.',
+      missing: 'The form endpoint is not configured yet. Use the email app button or write directly to the studio email.'
     },
     ru: {
       required: 'Пожалуйста, правильно заполните обязательные поля.',
@@ -21,13 +24,13 @@
       send: 'Отправить обращение',
       subject: 'Обращение в Onyx Meridian',
       bodyIntro: 'Обращение в Onyx Meridian',
-      chars: 'символов'
+      ok: 'Обращение успешно отправлено.',
+      fail: 'Не удалось отправить обращение. Попробуйте ещё раз или откройте почтовое приложение.',
+      missing: 'Сервис формы ещё не настроен. Откройте почтовое приложение или напишите напрямую на почту студии.'
     }
   }[lang];
-  var work = document.getElementById('work_type');
-  var projectField = document.getElementById('project-field');
+  var topic = document.getElementById('topic');
   var project = document.getElementById('project');
-  var category = document.getElementById('category');
   var summary = document.getElementById('summary');
   var message = document.getElementById('message');
   var email = document.getElementById('email');
@@ -36,45 +39,36 @@
   var submit = document.getElementById('support-submit');
   var mailto = document.getElementById('support-mailto');
   var count = document.getElementById('message-count');
-  var next = form.querySelector('input[name="_next"]');
-  var subject = form.querySelector('input[name="_subject"]');
-  var honey = form.querySelector('input[name="_honey"]');
+  var keyInput = document.getElementById('web3forms-key');
+  var subject = document.getElementById('support-subject');
+  var redirect = document.getElementById('support-redirect');
+  var success = document.getElementById('support-success');
+  var draftKey = 'om-support-draft-v2';
+  var draftTimer = null;
+
+  if (keyInput && cfg.accessKey) keyInput.value = cfg.accessKey;
+  if (redirect) redirect.value = window.location.origin + window.location.pathname + '?sent=1';
 
   function setStatus(text, kind) {
     if (!status) return;
     status.textContent = text || '';
-    status.className = 'support-status' + (kind ? ' ' + kind : '');
+    status.className = 'support-status-v11' + (kind ? ' ' + kind : '');
   }
-
-  function syncProject() {
-    var isAddon = work && work.value === 'addon';
-    if (projectField) projectField.hidden = !isAddon;
-    if (project) {
-      project.required = isAddon;
-      if (!isAddon) project.value = '';
-    }
-  }
-
   function syncSubject() {
     if (!subject) return;
     var parts = [S.subject];
-    if (category && category.value) parts.push(category.options[category.selectedIndex].text);
-    if (work && work.value) parts.push(work.options[work.selectedIndex].text);
-    if (project && project.value) parts.push(project.value);
+    if (topic && topic.value) parts.push(topic.options[topic.selectedIndex].text);
+    if (project && project.value) parts.push(project.options[project.selectedIndex].text);
     subject.value = parts.join(' — ');
   }
-
   function syncCount() {
     if (count && message) count.textContent = String(message.value.length);
   }
-
-  var draftKey = 'om-support-draft-v1';
-  var draftTimer = null;
   function saveDraft() {
     try {
       var data = {};
       Array.prototype.forEach.call(form.elements, function (el) {
-        if (!el.name || el.name.charAt(0) === '_' || el.type === 'submit' || el.type === 'reset' || el.type === 'button') return;
+        if (!el.name || el.name === 'access_key' || el.name === 'botcheck' || el.name === 'subject' || el.name === 'from_name' || el.name === 'redirect' || el.type === 'submit' || el.type === 'reset' || el.type === 'button') return;
         data[el.name] = el.type === 'checkbox' ? el.checked : el.value;
       });
       localStorage.setItem(draftKey, JSON.stringify(data));
@@ -84,6 +78,10 @@
     try {
       if (new URLSearchParams(window.location.search).get('sent') === '1') {
         localStorage.removeItem(draftKey);
+        if (success) {
+          success.hidden = false;
+          success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
         return;
       }
       var data = JSON.parse(localStorage.getItem(draftKey) || '{}');
@@ -94,21 +92,10 @@
       });
     } catch (e) {}
   }
-  form.addEventListener('input', function () {
-    clearTimeout(draftTimer);
-    draftTimer = setTimeout(saveDraft, 250);
-  });
-  form.addEventListener('change', function () {
-    clearTimeout(draftTimer);
-    draftTimer = setTimeout(saveDraft, 250);
-  });
-
   function validEmail(value) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
   }
-
   function validate() {
-    if (honey && honey.value) return false;
     if (!form.checkValidity()) {
       setStatus(S.required, 'error');
       form.reportValidity();
@@ -132,65 +119,94 @@
     setStatus('');
     return true;
   }
-
-  form.addEventListener('invalid', function () { setStatus(S.required, 'error'); }, true);
-  if (work) work.addEventListener('change', function () { syncProject(); syncSubject(); });
-  if (category) category.addEventListener('change', syncSubject);
-  if (project) project.addEventListener('change', syncSubject);
-  if (message) message.addEventListener('input', syncCount);
-  form.addEventListener('submit', function (e) {
-    syncProject();
+  function buildMailto() {
     syncSubject();
-    if (!validate()) {
-      e.preventDefault();
+    var lines = [S.bodyIntro, ''];
+    Array.prototype.forEach.call(form.elements, function (el) {
+      if (!el.name || el.name === 'access_key' || el.name === 'botcheck' || el.name === 'subject' || el.name === 'from_name' || el.name === 'redirect' || el.type === 'submit' || el.type === 'reset' || el.type === 'button') return;
+      if (el.type === 'checkbox') {
+        lines.push(el.name + ': ' + (el.checked ? 'yes' : 'no'));
+        return;
+      }
+      if (el.value) lines.push(el.name + ': ' + el.value);
+    });
+    var body = encodeURIComponent(lines.join('\n'));
+    var subj = encodeURIComponent(subject ? subject.value : S.subject);
+    return 'mailto:' + (cfg.email || 'yarik.internet@atomicmail.io') + '?subject=' + subj + '&body=' + body;
+  }
+  form.addEventListener('input', function () {
+    clearTimeout(draftTimer);
+    draftTimer = setTimeout(saveDraft, 250);
+    syncCount();
+  });
+  form.addEventListener('change', function () {
+    clearTimeout(draftTimer);
+    draftTimer = setTimeout(saveDraft, 250);
+    syncSubject();
+  });
+  form.addEventListener('invalid', function () { setStatus(S.required, 'error'); }, true);
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    syncSubject();
+    if (!validate()) return;
+    if (!cfg.accessKey) {
+      setStatus(S.missing, 'error');
       return;
     }
-    if (next) next.value = window.location.origin + window.location.pathname + '?sent=1';
     if (submit) {
+      submit.disabled = true;
       submit.textContent = S.sending;
       submit.setAttribute('aria-busy', 'true');
     }
+    var payload = { access_key: cfg.accessKey, botcheck: false };
+    Array.prototype.forEach.call(form.elements, function (el) {
+      if (!el.name || el.name === 'access_key' || el.name === 'botcheck' || el.type === 'submit' || el.type === 'reset' || el.type === 'button') return;
+      if (el.type === 'checkbox') payload[el.name] = el.checked;
+      else if (el.value) payload[el.name] = el.value;
+    });
+    payload.subject = subject ? subject.value : S.subject;
+    payload.redirect = redirect ? redirect.value : '';
+    fetch(cfg.endpoint || 'https://api.web3forms.com/submit', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+    }).then(function (r) { return r.json().catch(function () { return {}; }); }).then(function (json) {
+      if (json && json.success) {
+        setStatus(S.ok, 'ok');
+        if (success) {
+          success.hidden = false;
+          success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        form.reset();
+        try { localStorage.removeItem(draftKey); } catch (e) {}
+        syncCount();
+      } else {
+        setStatus(S.fail, 'error');
+      }
+    }).catch(function () {
+      setStatus(S.fail, 'error');
+    }).finally(function () {
+      if (submit) {
+        submit.disabled = false;
+        submit.textContent = S.send;
+        submit.removeAttribute('aria-busy');
+      }
+    });
   });
   form.addEventListener('reset', function () {
     window.setTimeout(function () {
-      syncProject();
       syncCount();
       setStatus('');
       try { localStorage.removeItem(draftKey); } catch (e) {}
       if (submit) {
+        submit.disabled = false;
         submit.textContent = S.send;
         submit.removeAttribute('aria-busy');
       }
     }, 0);
   });
-  if (mailto) {
-    mailto.addEventListener('click', function () {
-      syncProject();
-      syncSubject();
-      var lines = [S.bodyIntro, ''];
-      Array.prototype.forEach.call(form.elements, function (el) {
-        if (!el.name || el.name.charAt(0) === '_' || el.type === 'submit' || el.type === 'reset' || el.type === 'button') return;
-        if (el.type === 'checkbox') {
-          lines.push(el.name + ': ' + (el.checked ? 'yes' : 'no'));
-          return;
-        }
-        if (el.value) lines.push(el.name + ': ' + el.value);
-      });
-      var body = encodeURIComponent(lines.join('\n'));
-      var subj = encodeURIComponent(subject ? subject.value : S.subject);
-      window.location.href = 'mailto:yarik.internet@atomicmail.io?subject=' + subj + '&body=' + body;
-    });
-  }
-  try {
-    if (new URLSearchParams(window.location.search).get('sent') === '1') {
-      var ok = document.getElementById('support-success');
-      if (ok) {
-        ok.hidden = false;
-        ok.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  } catch (e) {}
+  if (mailto) mailto.addEventListener('click', function () { window.location.href = buildMailto(); });
   restoreDraft();
-  syncProject();
+  syncSubject();
   syncCount();
 })();

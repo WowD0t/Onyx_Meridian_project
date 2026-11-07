@@ -1,0 +1,26 @@
+{
+  "updated": "2026-11-07",
+  "items": [
+    {
+      "id": "gloamguise-next-update-2026-10",
+      "title_en": "Gloamguise update incoming",
+      "title_ru": "Скоро обновление Gloamguise",
+      "date": "2026-10-22",
+      "url": "en/gloamguise/index.html#updates"
+    },
+    {
+      "id": "om-eula-v3-1-2026-11",
+      "title_en": "OM Studio EULA v3.1",
+      "title_ru": "OM Studio EULA v3.1",
+      "date": "2026-11-04",
+      "url": "license.html"
+    },
+    {
+      "id": "official-sources-2026-11",
+      "title_en": "Official sources",
+      "title_ru": "Официальные источники",
+      "date": "2026-11-04",
+      "url": "en/index.html#official"
+    }
+  ]
+}

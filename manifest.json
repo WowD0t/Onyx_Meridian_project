@@ -1,0 +1,21 @@
+{
+  "name": "Onyx Meridian Interactive Studio",
+  "short_name": "Onyx Meridian",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b0d12",
+  "theme_color": "#0b0d12",
+  "icons": [
+    {
+      "src": "assets-img-emblem-64.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "assets-img-emblem-256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ]
+}

@@ -13,7 +13,7 @@
   }, true);
   try {
     var q = new URLSearchParams(window.location.search).get('q');
-    if (q) {
+    if (q && !/search\.html$/.test(window.location.pathname)) {
       window.addEventListener('DOMContentLoaded', function () {
         setTimeout(function () {
           var opener = document.querySelector('[data-search-open]');
