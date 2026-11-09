@@ -37,8 +37,8 @@ Permissions for bundles, mirrors, group uploads, translations, ports, commercial
 
 ## Support
 
-- English support form: https://wowd0t.github.io/Onyx_Meridian_project/en/support.html
-- Russian support form: https://wowd0t.github.io/Onyx_Meridian_project/ru/support.html
+- English support form: https://wowd0t.github.io/Onyx_Meridian_project/en-support.html
+- Russian support form: https://wowd0t.github.io/Onyx_Meridian_project/ru-support.html
 - Licensing e-mail: yarik.internet@atomicmail.io
 
 ---
@@ -80,6 +80,6 @@ Onyx Meridian Interactive Studio создаёт игровые системы д
 
 ## Поддержка
 
-- Английская форма: https://wowd0t.github.io/Onyx_Meridian_project/en/support.html
-- Русская форма: https://wowd0t.github.io/Onyx_Meridian_project/ru/support.html
+- Английская форма: https://wowd0t.github.io/Onyx_Meridian_project/en-support.html
+- Русская форма: https://wowd0t.github.io/Onyx_Meridian_project/ru-support.html
 - Почта по лицензиям: yarik.internet@atomicmail.io

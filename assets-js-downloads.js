@@ -62,14 +62,8 @@
       div.innerHTML = '<strong data-download-count>—</strong><span data-download-label>' + label + '</span>';
       panel.appendChild(div);
     });
-    Array.prototype.forEach.call(document.querySelectorAll('.hero-actions'), function (actions) {
-      if (actions.querySelector('.download-counter-inline')) return;
-      var a = actions.querySelector('a[download]');
-      if (!a) return;
-      var span = document.createElement('span');
-      span.className = 'download-counter-inline';
-      span.innerHTML = '<strong data-download-count>—</strong> <span data-download-label>' + label + '</span>';
-      actions.appendChild(span);
+    Array.prototype.forEach.call(document.querySelectorAll('.download-counter-inline'), function (el) {
+      if (el && el.parentNode) el.parentNode.removeChild(el);
     });
     get();
   }
