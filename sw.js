@@ -1,5 +1,44 @@
-const CACHE='om-v28-1a';
-const CORE=["./", "./ru-index.html", "./en-index.html", "./ru-addons.html", "./en-addons.html", "./ru-gloamguise-index.html", "./en-gloamguise-index.html", "./ru-downloads.html", "./en-downloads.html", "./ru-media.html", "./en-media.html", "./ru-support.html", "./en-support.html", "./ru-status.html", "./en-status.html", "./ru-compatibility.html", "./en-compatibility.html", "./ru-search.html", "./en-search.html", "./license.html", "./offline.html", "./404.html", "./assets-css-style.css", "./assets-js-search-index.js", "./assets-js-search-plus.js", "./assets-js-language.js", "./assets-js-app.js", "./assets-js-settings.js", "./assets-js-menu.js", "./assets-js-hotkeys.js", "./assets-js-downloads.js", "./assets-js-cf-downloads.js", "./assets-js-notifications.js", "./assets-js-announcements.js", "./assets-js-releases.js", "./assets-js-compatibility.js", "./assets-js-status.js", "./assets-js-support.js", "./assets-js-player.js", "./assets-js-verify.js", "./assets-img-emblem-64.png", "./assets-img-favicon-32.png", "./assets-img-icon-192.png", "./manifest.json", "./build.json", "./releases.json", "./compatibility.json", "./announcements.json", "./videos.json", "./cf-stats.json"];
-self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()));});
-self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
-self.addEventListener('fetch',e=>{const req=e.request;if(req.method!=='GET')return;const url=new URL(req.url);if(url.origin!==location.origin)return;const fresh=req.mode==='navigate'||url.pathname.endsWith('.json')||url.pathname.endsWith('.html')||url.pathname.endsWith('.xml');if(fresh){e.respondWith(fetch(req).then(res=>{const copy=res.clone();caches.open(CACHE).then(c=>c.put(req,copy));return res;}).catch(()=>caches.match(req).then(r=>r||(req.mode==='navigate'?caches.match('./offline.html'):undefined))));return;}e.respondWith(caches.match(req).then(r=>{const net=fetch(req).then(res=>{const copy=res.clone();caches.open(CACHE).then(c=>c.put(req,copy));return res;}).catch(()=>r);return r||net;}));});
+/* Increment this version whenever site assets change. */
+const CACHE = 'om-site-v31';
+const CORE = ['./', './ru-index.html', './en-index.html', './offline.html',
+  './assets-css-style.css?v=31', './assets-css-legacy.css?v=31',
+  './assets-js-app.js?v=31', './assets-js-settings.js?v=31', './manifest.json'];
+
+self.addEventListener('install', event => {
+  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting()));
+});
+self.addEventListener('activate', event => {
+  event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key =>
+    key !== CACHE && (key.startsWith('om-v') || key.startsWith('om-site-'))
+  ).map(key => caches.delete(key)))).then(() => self.clients.claim()));
+});
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
+});
+self.addEventListener('fetch', event => {
+  const req = event.request;
+  const url = new URL(req.url);
+  const scope = new URL(self.registration.scope);
+  if (req.method !== 'GET' || url.origin !== scope.origin || !url.pathname.startsWith(scope.pathname)) return;
+  // Downloads must not be cached or counted as successful by the worker.
+  if (/\.mcaddon$/i.test(url.pathname)) return;
+  event.respondWith((async () => {
+    const cache = await caches.open(CACHE);
+    const cacheUrl = new URL(req.url);
+    cacheUrl.searchParams.delete('om-refresh');
+    cacheUrl.searchParams.delete('ts');
+    const cacheKey = cacheUrl.toString();
+    try {
+      const response = await fetch(req, { cache: 'no-store' });
+      if (response.ok && response.type === 'basic') {
+        await cache.put(cacheKey, response.clone()).catch(() => {});
+      }
+      return response;
+    } catch (error) {
+      const cached = await cache.match(cacheKey, { ignoreSearch: true });
+      if (cached) return cached;
+      if (req.mode === 'navigate') return (await cache.match('./offline.html')) || Response.error();
+      return Response.error();
+    }
+  })());
+});

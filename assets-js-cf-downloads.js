@@ -80,7 +80,7 @@
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.json();
     }).then(function (j) {
-      if (j && j.then) return j;
+      if (typeof j === 'number') return j;
       var total = findTotal(j);
       if (total === null) throw new Error('No total');
       writeCache(total);

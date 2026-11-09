@@ -83,3 +83,15 @@ Onyx Meridian Interactive Studio создаёт игровые системы д
 - Английская форма: https://wowd0t.github.io/Onyx_Meridian_project/en-support.html
 - Русская форма: https://wowd0t.github.io/Onyx_Meridian_project/ru-support.html
 - Почта по лицензиям: yarik.internet@atomicmail.io
+
+## Development / Разработка
+
+The website is static. Run `python3 -m http.server 8000` and open the local URL.
+For browser regression tests: `npm ci`, `npx playwright install chromium`, then `npm test`.
+
+When releasing an update, change `build.json`'s version and the cache name in `sw.js`.
+If the legacy layer at the beginning of `assets-css-style.css` changes, regenerate
+`assets-css-legacy.css` from the contents of that layer. The fallback is loaded only
+by browsers without CSS cascade layer support. The download counter is a third-party,
+best-effort click estimate, not a verified download count; previous values used a
+per-device rule. Accurate counts require a server-side download endpoint and storage.

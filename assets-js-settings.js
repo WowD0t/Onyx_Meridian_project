@@ -8,7 +8,7 @@
     ru: { title: 'Настройки', appearance: 'Оформление', theme: 'Тема', dark: 'Тёмная', light: 'Светлая', system: 'Системная', accent: 'Акцент', blue: 'Тёмно-синий', mail: 'Кобальт', graphite: 'Графит', indigo: 'Индиго', violet: 'Фиолетовый', cyan: 'Бирюзовый', emerald: 'Изумрудный', amber: 'Янтарный', rose: 'Розовый', font: 'Размер текста', sm: 'Маленький', md: 'Средний', lg: 'Большой', xl: 'Очень большой', density: 'Плотность', comfortable: 'Свободная', compact: 'Компактная', hero: 'Главный блок', default: 'Обычный', compactHero: 'Компактный', focus: 'Фокус', width: 'Ширина статьи', normal: 'Обычная', wide: 'Широкая', full: 'Полная', links: 'Подчёркивать ссылки', on: 'Вкл', off: 'Выкл', performance: 'Производительность', mode: 'Режим производительности', auto: 'Авто', lite: 'Облегчённый', motion: 'Анимации', reduced: 'Уменьшены', effects: 'Фоновые эффекты', language: 'Язык', palette: 'Палитра', paletteHint: 'Карточка показывает акцент на кнопке, ссылке и бейдже в текущей теме. Контраст — для белого текста на акценте.', emblem: 'Стиль эмблемы', eA: 'Слева от заголовка', eB: 'По центру над заголовком', eC: 'В строке заголовка', eD: 'Фоновый водяной знак', eE: 'Обложка с наложением', reset: 'Сбросить настройки', close: 'Закрыть настройки', hint: 'Облегчённый режим отключает тяжёлые эффекты, сохраняя макет и цвета.' }
   }[lang];
   var defaults = { theme: 'system', accent: 'blue', font: 'md', density: 'comfortable', perf: 'auto', motion: 'full', effects: 'full', hero: 'default', width: 'normal', links: 'off', emblem: 'A' };
-  function load() { try { return Object.assign({}, defaults, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) { return Object.assign({}, defaults); } }
+  function load() { var s; try { s = Object.assign({}, defaults, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) { s = Object.assign({}, defaults); } if (['system', 'light', 'dark'].indexOf(s.theme) < 0) s.theme = 'system'; return s; }
   function save(s) { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} }
   function weakDevice() { try { if (navigator.connection && navigator.connection.saveData) return true; if (navigator.deviceMemory && navigator.deviceMemory <= 4) return true; if (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) return true; } catch (e) {} return false; }
   function apply(s) {
@@ -16,7 +16,9 @@
     var theme = s.theme;
     if (theme === 'system') theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
     r.setAttribute('data-theme', theme);
+    r.setAttribute('data-theme-preference', s.theme);
     try { localStorage.setItem('om-theme', theme); } catch (e) {}
+    if (themeMenu) syncThemeMenu();
     var tc = document.querySelector('meta[name="theme-color"]:not([media])');
     if (!tc) { tc = document.createElement('meta'); tc.setAttribute('name', 'theme-color'); document.head.appendChild(tc); }
     tc.setAttribute('content', theme === 'light' ? '#F7F8FB' : '#07080B');
@@ -35,6 +37,7 @@
     if (meta) meta.setAttribute('content', theme === 'light' ? '#F6F8FA' : '#0D1117');
   }
   var state = load();
+  if (['system', 'light', 'dark'].indexOf(state.theme) < 0) state.theme = 'system';
   apply(state);
   var overlay = document.createElement('div');
   overlay.className = 'om-settings-overlay om-drawer-overlay';
@@ -117,6 +120,34 @@
     if (el.matches('[data-lang-select]')) { var target = document.documentElement.getAttribute(el.value === 'ru' ? 'data-alt-ru' : 'data-alt-en'); try { localStorage.setItem('om-lang', el.value); } catch (err) {} if (target) window.location.href = target; }
   });
   panel.querySelector('.om-settings-reset').addEventListener('click', function () { state = Object.assign({}, defaults); save(state); apply(state); window.location.reload(); });
-  if (window.matchMedia) window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function () { if (state.theme === 'system') apply(state); });
-  window.OMSettings = { open: open, close: close, apply: apply, state: state };
+  var themeButton = document.getElementById('theme-btn');
+  var themeMenu = document.createElement('div');
+  themeMenu.className = 'om-theme-menu'; themeMenu.id = 'om-theme-menu'; themeMenu.hidden = true;
+  themeMenu.setAttribute('role', 'group'); themeMenu.setAttribute('aria-label', T.theme);
+  var menuTitle = document.createElement('strong'); menuTitle.textContent = T.theme; themeMenu.appendChild(menuTitle);
+  ['system', 'light', 'dark'].forEach(function (value) {
+    var option = document.createElement('button'); option.type = 'button'; option.setAttribute('data-theme-choice', value);
+    option.textContent = T[value];
+    option.addEventListener('click', function () { state.theme = value; save(state); apply(state); themeMenu.hidden = true; themeButton.setAttribute('aria-expanded', 'false'); themeButton.focus(); });
+    themeMenu.appendChild(option);
+  });
+  function syncThemeMenu() {
+    var select = panel.querySelector('[data-set="theme"]'); if (select) select.value = state.theme;
+    Array.prototype.forEach.call(themeMenu.querySelectorAll('[data-theme-choice]'), function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-theme-choice') === state.theme ? 'true' : 'false'); });
+    if (themeButton) { themeButton.setAttribute('aria-label', T.theme + ': ' + T[state.theme]); themeButton.title = T.theme + ': ' + T[state.theme];
+      themeButton.innerHTML = document.documentElement.getAttribute('data-theme') === 'dark' ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>' : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
+    }
+  }
+  if (themeButton) {
+    themeButton.setAttribute('aria-controls', themeMenu.id); themeButton.setAttribute('aria-expanded', 'false');
+    themeButton.parentNode.appendChild(themeMenu);
+    themeButton.addEventListener('click', function (e) { e.stopPropagation(); themeMenu.hidden = !themeMenu.hidden; themeButton.setAttribute('aria-expanded', String(!themeMenu.hidden)); if (!themeMenu.hidden) themeMenu.querySelector('[aria-pressed="true"]').focus(); });
+    document.addEventListener('click', function (e) { if (!themeMenu.hidden && !themeMenu.contains(e.target) && e.target !== themeButton) { themeMenu.hidden = true; themeButton.setAttribute('aria-expanded', 'false'); } });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !themeMenu.hidden) { themeMenu.hidden = true; themeButton.setAttribute('aria-expanded', 'false'); themeButton.focus(); } });
+  }
+  syncThemeMenu();
+  if (window.matchMedia) { var mq = window.matchMedia('(prefers-color-scheme: light)'); var onScheme = function () { if (state.theme === 'system') apply(state); }; if (mq.addEventListener) mq.addEventListener('change', onScheme); else if (mq.addListener) mq.addListener(onScheme); }
+  window.addEventListener('storage', function (e) { if (e.key === KEY) { state = load(); apply(state); } });
+  window.addEventListener('pageshow', function (e) { if (e.persisted) { state = load(); apply(state); } });
+  window.OMSettings = { open: open, close: close, apply: apply, getState: function () { return state; } };
 })();

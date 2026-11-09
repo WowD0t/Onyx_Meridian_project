@@ -39,7 +39,7 @@
       if (build === null) { build = j.version; return; }
       if (j.version !== build && !updateShown) {
         updateShown = true;
-        if (window.OMToast) window.OMToast.show({ id: 'site-update', title: T.update, body: j.version, timeout: 0, actions: [{ label: T.refresh, primary: true, onClick: function () { location.reload(); } }] });
+        if (window.OMToast) window.OMToast.show({ id: 'site-update', title: T.update, body: j.version, timeout: 0, actions: [{ label: T.refresh, primary: true, onClick: function () { if (window.OMUpdateSite) window.OMUpdateSite(); else location.reload(); } }] });
       }
     }).catch(function () {});
   }
