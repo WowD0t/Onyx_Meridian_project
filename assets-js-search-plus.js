@@ -11,9 +11,9 @@
   };
   var CATS = [['all', T.all], ['studio', T.studio], ['addons', T.addons], ['wiki', T.wiki], ['media', T.media], ['downloads', T.downloads], ['status', T.status], ['support', T.support], ['licence', T.licence]];
   var QUICK = lang === 'ru' ? [
-    ['Скачать аддон', 'gloamguise/index.html#download'], ['Вики аддона', 'gloamguise/wiki/home.html'], ['Лицензия', '../license.html'], ['Поддержка', 'support.html'], ['Загрузки', 'downloads.html'], ['Совместимость', 'compatibility.html']
+    ['Скачать аддон', 'ru-gloamguise-index.html#download'], ['Вики аддона', 'ru-gloamguise-wiki-home.html'], ['Лицензия', 'license.html'], ['Поддержка', 'ru-support.html'], ['Загрузки', 'ru-downloads.html'], ['Совместимость', 'ru-compatibility.html']
   ] : [
-    ['Download add-on', 'gloamguise/index.html#download'], ['Add-on wiki', 'gloamguise/wiki/home.html'], ['Licence', '../license.html'], ['Support', 'support.html'], ['Downloads', 'downloads.html'], ['Compatibility', 'compatibility.html']
+    ['Download add-on', 'en-gloamguise-index.html#download'], ['Add-on wiki', 'en-gloamguise-wiki-home.html'], ['Licence', 'license.html'], ['Support', 'en-support.html'], ['Downloads', 'en-downloads.html'], ['Compatibility', 'en-compatibility.html']
   ];
   var root = document.documentElement.getAttribute('data-root') || '';
   var items = (window.OM_INDEX || []).filter(function (i) { return i.lang === lang; });

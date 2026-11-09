@@ -17,6 +17,9 @@
     if (theme === 'system') theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
     r.setAttribute('data-theme', theme);
     try { localStorage.setItem('om-theme', theme); } catch (e) {}
+    var tc = document.querySelector('meta[name="theme-color"]:not([media])');
+    if (!tc) { tc = document.createElement('meta'); tc.setAttribute('name', 'theme-color'); document.head.appendChild(tc); }
+    tc.setAttribute('content', theme === 'light' ? '#F7F8FB' : '#07080B');
     r.setAttribute('data-accent', s.accent);
     r.setAttribute('data-font', s.font);
     r.setAttribute('data-density', s.density);
