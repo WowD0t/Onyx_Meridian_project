@@ -3,11 +3,6 @@
     try { localStorage.setItem('om-lang', lang); } catch (e) {}
   }
   document.addEventListener('click', function (e) {
-    var langBtn = e.target.closest ? e.target.closest('#lang-btn') : null;
-    if (langBtn) {
-      var target = langBtn.getAttribute('data-target') || '';
-      setLang(/(^|[\/-])ru([\/.-]|$)/.test(target) ? 'ru' : 'en');
-    }
     var licenseLang = e.target.closest ? e.target.closest('[data-license-site-lang]') : null;
     if (licenseLang) setLang(licenseLang.getAttribute('data-license-site-lang'));
   }, true);

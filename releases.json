@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "updated": "2026-11-03",
+  "project": "gloamguise",
+  "current": "2.1.5",
+  "releases": [
+    {
+      "version": "2.1.5",
+      "channel": "stable",
+      "date": "2026-10-22",
+      "file": "Gloamguise_False_Facades_v2.1.5.mcaddon",
+      "size": 487559,
+      "sha256": "7c37ebf920bee57d3141b95b61bb3516f683553a137b38984cca093fa4d4318c",
+      "min_bedrock": "1.26.40",
+      "notes_ru": "Студийный релиз под OM Studio EULA v3.1. Один .mcaddon содержит оба пака.",
+      "notes_en": "Studio release under OM Studio EULA v3.1. One .mcaddon contains both packs.",
+      "mirrors": [
+        { "label": "CurseForge", "url": "https://www.curseforge.com/minecraft-bedrock/addons/gloamguise-false-facades/files" }
+      ]
+    }
+  ],
+  "history": []
+}

@@ -1,0 +1,18 @@
+{
+  "version": "https://jsonfeed.org/version/1.1",
+  "title": "Onyx Meridian updates",
+  "home_page_url": "https://wowd0t.github.io/Onyx_Meridian_project/",
+  "feed_url": "https://wowd0t.github.io/Onyx_Meridian_project/feed.json",
+  "items": [
+    {
+      "id": "gloamguise-2.1.5",
+      "url": "https://wowd0t.github.io/Onyx_Meridian_project/en-downloads.html#2.1.5",
+      "title": "Gloamguise v2.1.5",
+      "content_text": "Studio release under OM Studio EULA v3.1. One .mcaddon contains both packs.",
+      "date_published": "2026-10-22T00:00:00+00:00",
+      "tags": [
+        "release"
+      ]
+    }
+  ]
+}

@@ -4,7 +4,11 @@
   var lang = document.documentElement.getAttribute('data-lang') === 'ru' ? 'ru' : 'en';
   var verifyHref = document.documentElement.getAttribute('data-verify-href') || 'verify.html';
   var feedHref = document.documentElement.getAttribute('data-feed-href') || 'feed.xml';
-  var T = lang === 'ru' ? { menu: 'Меню сайта', close: 'Закрыть меню', nav: 'Разделы', tools: 'Инструменты', prefs: 'Настройки сайта', settings: 'Открыть настройки', hotkeys: 'Горячие клавиши', search: 'Поиск по сайту', notifications: 'Уведомления', verify: 'Проверка файла', feed: 'Лента обновлений', updates: 'Уведомления об обновлениях', theme: 'Переключить тему', language: 'Сменить язык', open: 'Открыть меню' } : { menu: 'Site menu', close: 'Close menu', nav: 'Navigation', tools: 'Tools', prefs: 'Preferences', settings: 'Open settings', hotkeys: 'Keyboard shortcuts', search: 'Search the site', notifications: 'Notifications', verify: 'Verify download', feed: 'Updates feed', updates: 'Enable update alerts', theme: 'Toggle theme', language: 'Switch language', open: 'Open menu' };
+  var mediaHref = document.documentElement.getAttribute('data-media-href') || verifyHref.replace(/verify\.html$/, 'media.html');
+  var downloadsHref = document.documentElement.getAttribute('data-downloads-href') || mediaHref.replace(/media\.html$/, 'downloads.html');
+  var statusHref = document.documentElement.getAttribute('data-status-href') || mediaHref.replace(/media\.html$/, 'status.html');
+  var compatHref = document.documentElement.getAttribute('data-compat-href') || mediaHref.replace(/media\.html$/, 'compatibility.html');
+  var T = lang === 'ru' ? { menu: 'Меню сайта', close: 'Закрыть меню', nav: 'Разделы', tools: 'Инструменты', prefs: 'Настройки сайта', settings: 'Открыть настройки', hotkeys: 'Горячие клавиши', search: 'Поиск по сайту', notifications: 'Уведомления', verify: 'Проверка файла', feed: 'Лента обновлений', updates: 'Уведомления об обновлениях', theme: 'Переключить тему', language: 'Сменить язык', media: 'Медиа и видео', downloads: 'Загрузки и версии', status: 'Статус сервисов', compat: 'Совместимость', open: 'Открыть меню' } : { menu: 'Site menu', close: 'Close menu', nav: 'Navigation', tools: 'Tools', prefs: 'Preferences', settings: 'Open settings', hotkeys: 'Keyboard shortcuts', search: 'Search the site', notifications: 'Notifications', verify: 'Verify download', feed: 'Updates feed', updates: 'Enable update alerts', theme: 'Toggle theme', language: 'Switch language', media: 'Media & videos', downloads: 'Downloads & versions', status: 'Service status', compat: 'Compatibility', open: 'Open menu' };
   var header = document.querySelector('.site-header .header-actions');
   if (!header) return;
   var btn = document.createElement('button');
@@ -30,6 +34,10 @@
   html += '</section><section class="om-drawer-group"><h3 class="om-drawer-title">' + T.tools + '</h3>';
   html += '<button type="button" class="om-drawer-btn" data-menu-action="search">' + T.search + '<small>Ctrl K</small></button>';
   html += '<button type="button" class="om-drawer-btn" data-menu-action="notifications">' + T.notifications + '</button>';
+  html += '<a class="om-drawer-link" href="' + mediaHref + '">' + T.media + '</a>';
+  html += '<a class="om-drawer-link" href="' + downloadsHref + '">' + T.downloads + '</a>';
+  html += '<a class="om-drawer-link" href="' + statusHref + '">' + T.status + '</a>';
+  html += '<a class="om-drawer-link" href="' + compatHref + '">' + T.compat + '</a>';
   html += '<a class="om-drawer-link" href="' + verifyHref + '">' + T.verify + '</a>';
   html += '<a class="om-drawer-link" href="' + feedHref + '">' + T.feed + '</a>';
   html += '<button type="button" class="om-drawer-btn" data-menu-action="updates">' + T.updates + '</button>';
@@ -59,7 +67,7 @@
     if (action === 'notifications') { close(); var n = document.getElementById('notification-btn'); if (n) n.click(); }
     if (action === 'updates') { close(); if (window.OMUpdates) window.OMUpdates.enable(); }
     if (action === 'theme') { var t = document.getElementById('theme-btn'); if (t) t.click(); }
-    if (action === 'language') { var l = document.getElementById('lang-btn'); if (l) l.click(); }
+    if (action === 'language') { close(); if (window.OMLanguage) window.OMLanguage.open(); else { var l = document.getElementById('lang-btn'); if (l) l.click(); } }
   });
   window.OMMenu = { open: open, close: close };
 })();

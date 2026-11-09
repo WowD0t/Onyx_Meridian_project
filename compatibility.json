@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "updated": "2026-11-03",
+  "project": "gloamguise",
+  "release": "2.1.5",
+  "rows": [
+    { "target": "Bedrock 1.26.40+", "status": "declared", "ru": "Заявленная минимальная версия для v2.1.5.", "en": "Declared minimum version for v2.1.5." },
+    { "target": "Bedrock ниже 1.26.40", "status": "unsupported", "ru": "Не поддерживается текущим релизом.", "en": "Not supported by the current release." },
+    { "target": "Будущие версии Bedrock", "status": "untested", "ru": "Не проверено до выхода версии; следите за объявлениями.", "en": "Not verified until the version ships; follow announcements." },
+    { "target": "Windows / Android / iOS", "status": "expected", "ru": "Ожидается для Bedrock, но не является отдельным лабораторным тестом.", "en": "Expected for Bedrock, but not a separate lab test." },
+    { "target": "Realms и серверы", "status": "expected", "ru": "Пак устанавливается на сервер/мир; игрокам не требуется отдельная установка.", "en": "The pack is installed on the server/world; players do not need a separate install." },
+    { "target": "Java Edition", "status": "unsupported", "ru": "Это аддон Bedrock; перенос также запрещён лицензией.", "en": "This is a Bedrock add-on; porting is also prohibited by the licence." }
+  ],
+  "legend": {
+    "declared": { "ru": "Заявлено релизом", "en": "Declared by release" },
+    "expected": { "ru": "Ожидается", "en": "Expected" },
+    "untested": { "ru": "Не проверено", "en": "Untested" },
+    "unsupported": { "ru": "Не поддерживается", "en": "Unsupported" }
+  }
+}
