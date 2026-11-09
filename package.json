@@ -1,6 +1,11 @@
 {
   "name": "onyx-meridian-site",
   "private": true,
-  "scripts": { "test": "playwright test" },
-  "devDependencies": { "@playwright/test": "1.57.0" }
+  "scripts": {
+    "test": "playwright test",
+    "release:prepare": "python3 scripts/prepare-release.py"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.57.0"
+  }
 }

@@ -46,8 +46,10 @@
   center.appendChild(button);
   var panel = document.createElement('section');
   panel.className = 'notification-panel'; panel.id = 'notification-panel';
-  panel.setAttribute('role', 'dialog'); panel.setAttribute('aria-modal', 'false'); panel.setAttribute('aria-label', text.title);
+  panel.setAttribute('role', 'dialog'); panel.setAttribute('aria-modal', 'false'); panel.setAttribute('aria-labelledby', 'notification-title');
   panel.hidden = true; document.body.appendChild(panel);
+  // Rendering can replace the clicked node before the document click handler runs.
+  panel.addEventListener('click', function (e) { e.stopPropagation(); });
   var count = button.querySelector('.notification-count');
   var isOpen = false, tab = 'all', query = '', showSettings = false;
   function kindLabel(k) { return (KIND[k] || KIND.update)[lang]; }
@@ -57,37 +59,44 @@
     count.hidden = n === 0;
     button.classList.toggle('has-unread', n > 0);
     button.setAttribute('aria-label', text.open + (n ? ' · ' + n + ' ' + text.unread : ''));
+    // Preserve focus and scroll when a filter, setting or incoming announcement changes.
+    var focused = panel.contains(document.activeElement) ? document.activeElement.getAttribute('data-focus-key') : null;
+    var previousScroll = panel.querySelector('.notification-scroll');
+    var scrollTop = previousScroll ? previousScroll.scrollTop : 0;
     panel.innerHTML = '';
     var head = document.createElement('div'); head.className = 'notification-head';
-    var heading = document.createElement('div');
-    var h = document.createElement('h2'); h.textContent = text.title;
-    var p = document.createElement('p'); p.textContent = text.sub;
-    heading.appendChild(h); heading.appendChild(p);
-    var actions = document.createElement('div'); actions.className = 'notification-head-actions';
-    var settingsBtn = document.createElement('button'); settingsBtn.type = 'button'; settingsBtn.className = 'notification-mark-all'; settingsBtn.textContent = '⚙'; settingsBtn.setAttribute('aria-label', text.settings);
-    settingsBtn.addEventListener('click', function () { showSettings = !showSettings; render(); });
-    var markAll = document.createElement('button'); markAll.type = 'button'; markAll.className = 'notification-mark-all'; markAll.textContent = text.markAll; markAll.disabled = n === 0;
-    markAll.addEventListener('click', function () { items.forEach(function (i) { read[i.id] = true; }); saveRead(); render(); });
-    var close = document.createElement('button'); close.type = 'button'; close.className = 'notification-close'; close.setAttribute('aria-label', text.close); close.textContent = '×';
+    var heading = document.createElement('div'); heading.className = 'notification-heading';
+    var eyebrow = document.createElement('span'); eyebrow.className = 'notification-eyebrow'; eyebrow.textContent = lang === 'ru' ? 'ONYX MERIDIAN / ОБНОВЛЕНИЯ' : 'ONYX MERIDIAN / UPDATES';
+    var h = document.createElement('h2'); h.textContent = text.title; h.id = 'notification-title';
+    var p = document.createElement('p'); p.textContent = n ? n + ' ' + text.unread : text.noUnread;
+    heading.appendChild(eyebrow); heading.appendChild(h); heading.appendChild(p);
+    var close = document.createElement('button'); close.type = 'button'; close.className = 'notification-close'; close.setAttribute('data-focus-key', 'close'); close.setAttribute('aria-label', text.close); close.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
     close.addEventListener('click', function () { setOpen(false); });
-    actions.appendChild(settingsBtn); actions.appendChild(markAll); actions.appendChild(close);
-    head.appendChild(heading); head.appendChild(actions); panel.appendChild(head);
-    var tabs = document.createElement('div'); tabs.className = 'notification-tabs';
+    head.appendChild(heading); head.appendChild(close); panel.appendChild(head);
+    var controls = document.createElement('div'); controls.className = 'notification-controls';
+    var tabs = document.createElement('div'); tabs.className = 'notification-tabs'; tabs.setAttribute('aria-label', text.title);
     [['all', text.all], ['unread', text.unreadTab], ['announcements', text.annTab]].forEach(function (t) {
-      var b = document.createElement('button'); b.type = 'button'; b.className = 'notification-tab' + (tab === t[0] ? ' active' : ''); b.textContent = t[1];
-      b.addEventListener('click', function () { tab = t[0]; render(); });
-      tabs.appendChild(b);
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'notification-tab' + (tab === t[0] ? ' active' : ''); b.textContent = t[1]; b.setAttribute('aria-pressed', String(tab === t[0])); b.setAttribute('data-focus-key', 'tab-' + t[0]);
+      b.addEventListener('click', function () { tab = t[0]; render(); }); tabs.appendChild(b);
     });
-    panel.appendChild(tabs);
-    var search = document.createElement('input'); search.type = 'search'; search.className = 'notification-search'; search.placeholder = text.search; search.value = query;
+    controls.appendChild(tabs);
+    var tools = document.createElement('div'); tools.className = 'notification-tools';
+    var markAll = document.createElement('button'); markAll.type = 'button'; markAll.className = 'notification-mark-all'; markAll.textContent = text.markAll; markAll.disabled = n === 0; markAll.setAttribute('data-focus-key', 'mark-all');
+    markAll.addEventListener('click', function () { items.forEach(function (i) { read[i.id] = true; }); saveRead(); render(); });
+    var settingsBtn = document.createElement('button'); settingsBtn.type = 'button'; settingsBtn.className = 'notification-settings-btn'; settingsBtn.setAttribute('data-focus-key', 'settings'); settingsBtn.setAttribute('aria-label', text.settings); settingsBtn.setAttribute('title', text.settings); settingsBtn.setAttribute('aria-expanded', String(showSettings)); settingsBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .32 1.77l.06.06-1.95 3.38-.09-.03a1.6 1.6 0 0 0-1.69.61l-.05.08H8l-.05-.08a1.6 1.6 0 0 0-1.69-.61l-.09.03-1.95-3.38.06-.06A1.6 1.6 0 0 0 4.6 15l-.1-.06V9.06L4.6 9a1.6 1.6 0 0 0-.32-1.77l-.06-.06 1.95-3.38.09.03a1.6 1.6 0 0 0 1.69-.61L8 3.13h8l.05.08a1.6 1.6 0 0 0 1.69.61l.09-.03 1.95 3.38-.06.06A1.6 1.6 0 0 0 19.4 9l.1.06v5.88z"/></svg>';
+    settingsBtn.addEventListener('click', function () { showSettings = !showSettings; render(); });
+    tools.appendChild(markAll); tools.appendChild(settingsBtn); controls.appendChild(tools); panel.appendChild(controls);
+    var searchWrap = document.createElement('div'); searchWrap.className = 'notification-search-wrap';
+    searchWrap.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>';
+    var search = document.createElement('input'); search.type = 'search'; search.className = 'notification-search'; search.placeholder = text.search; search.setAttribute('aria-label', text.search); search.setAttribute('data-focus-key', 'search'); search.value = query;
     search.addEventListener('input', function () { query = search.value.toLowerCase(); renderList(); });
-    panel.appendChild(search);
-    if (showSettings) panel.appendChild(buildSettings());
-    var list = document.createElement('div'); list.className = 'notification-list'; list.id = 'om-notification-list';
-    panel.appendChild(list);
-    var foot = document.createElement('div'); foot.className = 'notification-foot'; foot.textContent = text.foot;
-    panel.appendChild(foot);
-    renderList();
+    searchWrap.appendChild(search); panel.appendChild(searchWrap);
+    var scroll = document.createElement('div'); scroll.className = 'notification-scroll';
+    if (showSettings) scroll.appendChild(buildSettings());
+    var list = document.createElement('div'); list.className = 'notification-list'; list.id = 'om-notification-list'; list.setAttribute('aria-live', 'polite'); scroll.appendChild(list); panel.appendChild(scroll);
+    var foot = document.createElement('div'); foot.className = 'notification-foot'; foot.textContent = text.foot; panel.appendChild(foot);
+    renderList(); scroll.scrollTop = scrollTop;
+    if (focused && isOpen) { var restore = panel.querySelector('[data-focus-key="' + focused + '"]'); if (!restore || restore.disabled) restore = panel.querySelector('.notification-tab.active'); if (restore) restore.focus({ preventScroll: true }); }
   }
   function renderList() {
     var list = panel.querySelector('#om-notification-list');
@@ -100,11 +109,12 @@
       return true;
     });
     shown.sort(function (a, b) { return (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0); });
-    if (!shown.length) { list.innerHTML = '<p style="color:var(--faint);font-size:.85rem;padding:12px">' + (tab === 'unread' ? text.noUnread : text.empty) + '</p>'; return; }
+    if (!shown.length) { var empty = document.createElement('div'); empty.className = 'notification-empty'; empty.textContent = query ? (lang === 'ru' ? 'Ничего не найдено' : 'No results found') : (tab === 'unread' ? text.noUnread : text.empty); list.appendChild(empty); return; }
     shown.forEach(function (item) {
       var isRead = !!read[item.id];
-      var article = document.createElement('article');
-      article.className = 'notification-item' + (isRead ? ' is-read' : '');
+      var article = document.createElement('article'); article.className = 'notification-item' + (isRead ? ' is-read' : '');
+      var dot = document.createElement('span'); dot.className = 'notification-dot'; dot.setAttribute('aria-hidden', 'true'); article.appendChild(dot);
+      var content = document.createElement('div'); content.className = 'notification-content';
       var top = document.createElement('div'); top.className = 'notification-item-top';
       var kind = document.createElement('span'); kind.className = 'notification-kind ' + (item.kind || 'update'); kind.textContent = kindLabel(item.kind);
       var when = document.createElement('span'); when.className = 'notification-when'; when.textContent = item.when ? item.when[lang] : '';
@@ -114,11 +124,8 @@
       var body = document.createElement('p'); body.textContent = item.body[lang];
       var foot = document.createElement('div'); foot.className = 'notification-item-foot';
       if (item.href) { var link = document.createElement('a'); link.className = 'notification-cta'; link.href = item.href; link.textContent = (item.cta ? item.cta[lang] : text.open) + ' →'; link.addEventListener('click', function () { read[item.id] = true; saveRead(); }); foot.appendChild(link); }
-      var mark = document.createElement('button'); mark.type = 'button'; mark.className = 'notification-mark'; mark.textContent = isRead ? text.read : text.mark; mark.disabled = isRead;
-      mark.addEventListener('click', function () { read[item.id] = true; saveRead(); render(); });
-      foot.appendChild(mark);
-      article.appendChild(top); article.appendChild(title); article.appendChild(body); article.appendChild(foot);
-      list.appendChild(article);
+      if (!isRead) { var mark = document.createElement('button'); mark.type = 'button'; mark.className = 'notification-mark'; mark.textContent = text.mark; mark.addEventListener('click', function () { read[item.id] = true; saveRead(); render(); var activeTab = panel.querySelector('.notification-tab.active'); if (activeTab) activeTab.focus({ preventScroll: true }); }); foot.appendChild(mark); }
+      content.appendChild(top); content.appendChild(title); content.appendChild(body); content.appendChild(foot); article.appendChild(content); list.appendChild(article);
     });
   }
   function buildSettings() {

@@ -1732,18 +1732,18 @@ html[data-theme="light"] .footer-legal{color:var(--faint)}
 
 }
 
-@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:400;font-display:swap;src:url('assets-fonts-ibm-plex-sans-cyrillic-400-normal.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
-@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:400;font-display:swap;src:url('assets-fonts-ibm-plex-sans-latin-400-normal.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
-@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:500;font-display:swap;src:url('assets-fonts-ibm-plex-sans-cyrillic-500-normal.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
-@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:500;font-display:swap;src:url('assets-fonts-ibm-plex-sans-latin-500-normal.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
-@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:600;font-display:swap;src:url('assets-fonts-ibm-plex-sans-cyrillic-600-normal.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
-@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:600;font-display:swap;src:url('assets-fonts-ibm-plex-sans-latin-600-normal.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
-@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:700;font-display:swap;src:url('assets-fonts-ibm-plex-sans-cyrillic-700-normal.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
-@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:700;font-display:swap;src:url('assets-fonts-ibm-plex-sans-latin-700-normal.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
-@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;src:url('assets-fonts-ibm-plex-mono-cyrillic-400-normal.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
-@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;src:url('assets-fonts-ibm-plex-mono-latin-400-normal.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
-@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:600;font-display:swap;src:url('assets-fonts-ibm-plex-mono-cyrillic-600-normal.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
-@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:600;font-display:swap;src:url('assets-fonts-ibm-plex-mono-latin-600-normal.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:400;font-display:swap;src:url('assets-fonts-ibm-plex-sans-cyrillic-400-normal.woff2?v=32') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:400;font-display:swap;src:url('assets-fonts-ibm-plex-sans-latin-400-normal.woff2?v=32') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:500;font-display:swap;src:url('assets-fonts-ibm-plex-sans-cyrillic-500-normal.woff2?v=32') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:500;font-display:swap;src:url('assets-fonts-ibm-plex-sans-latin-500-normal.woff2?v=32') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:600;font-display:swap;src:url('assets-fonts-ibm-plex-sans-cyrillic-600-normal.woff2?v=32') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:600;font-display:swap;src:url('assets-fonts-ibm-plex-sans-latin-600-normal.woff2?v=32') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:700;font-display:swap;src:url('assets-fonts-ibm-plex-sans-cyrillic-700-normal.woff2?v=32') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:700;font-display:swap;src:url('assets-fonts-ibm-plex-sans-latin-700-normal.woff2?v=32') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;src:url('assets-fonts-ibm-plex-mono-cyrillic-400-normal.woff2?v=32') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;src:url('assets-fonts-ibm-plex-mono-latin-400-normal.woff2?v=32') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:600;font-display:swap;src:url('assets-fonts-ibm-plex-mono-cyrillic-600-normal.woff2?v=32') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:600;font-display:swap;src:url('assets-fonts-ibm-plex-mono-latin-600-normal.woff2?v=32') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
 
 :root{
   --bg:#F4F6F3;--bg-2:#EBEFE9;--panel:#FFFFFF;--panel-2:#F0F3EF;--panel-3:#E4E9E3;
@@ -3233,3 +3233,86 @@ a.om-dlstats-k:hover{color:var(--text)}
   .notification-foot { padding: 10px 14px; }
   .om-mobile-actionbar { background: var(--panel); }
 }
+
+/* Studio bulletin — a compact, readable inbox on both touch and desktop. */
+.notification-panel:not([hidden]) {
+  position: fixed; top: calc(var(--header-h) + 12px); right: 18px; left: auto;
+  display: flex; flex-direction: column; width: min(456px, calc(100vw - 32px));
+  height: min(680px, calc(100vh - var(--header-h) - 24px));
+  max-height: calc(100vh - var(--header-h) - 24px); overflow: hidden;
+  border: 1px solid var(--border); border-radius: 18px; background: var(--panel);
+  box-shadow: 0 20px 60px rgba(0,0,0,.25), 0 2px 8px rgba(0,0,0,.12); color: var(--text);
+}
+.notification-panel .notification-head { position: static; display: flex; flex-wrap: nowrap; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 20px 20px 14px; background: transparent; border: 0; backdrop-filter: none; }
+.notification-heading { min-width: 0; }
+.notification-panel .notification-eyebrow { display: block; margin: 0 0 7px; font: 700 10px/1.3 var(--font); letter-spacing: .12em; color: var(--link); }
+.notification-panel .notification-head h2 { margin: 0; font: 700 22px/1.2 var(--font); letter-spacing: -.025em; color: var(--text); }
+.notification-panel .notification-head p { margin: 5px 0 0; font: 400 13px/1.4 var(--font); color: var(--muted); }
+.notification-panel .notification-close, .notification-panel .notification-settings-btn { display: inline-flex; align-items: center; justify-content: center; flex: none; width: 36px; height: 36px; padding: 0; border: 1px solid var(--border); border-radius: 10px; background: var(--panel); color: var(--muted); cursor: pointer; }
+.notification-panel .notification-close svg, .notification-panel .notification-settings-btn svg { width: 18px; height: 18px; }
+.notification-panel .notification-close:hover, .notification-panel .notification-settings-btn:hover, .notification-panel .notification-settings-btn[aria-expanded="true"] { color: var(--link); border-color: var(--link); background: var(--panel-2); }
+.notification-panel .notification-controls { display: flex; align-items: center; gap: 10px; padding: 0 16px 12px; flex-wrap: wrap; }
+.notification-panel .notification-tabs { display: flex; flex: 1 1 auto; gap: 3px; min-width: 0; padding: 3px; margin: 0; background: var(--panel-2); border-radius: 10px; overflow-x: auto; }
+.notification-panel .notification-tab { flex: 0 0 auto; min-height: 34px; padding: 6px 10px; border: 0; border-radius: 7px; background: transparent; color: var(--muted); font: 600 12px/1.2 var(--font); white-space: nowrap; }
+.notification-panel .notification-tab.active { background: var(--panel); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,.16); }
+.notification-panel .notification-tools { display: flex; align-items: center; justify-content: flex-end; gap: 7px; margin-left: auto; }
+.notification-panel .notification-mark-all { min-height: 36px; padding: 6px 8px; border: 0; border-radius: 8px; background: transparent; color: var(--link); font: 600 12px/1.3 var(--font); cursor: pointer; }
+.notification-panel .notification-mark-all:hover:not(:disabled) { background: var(--panel-2); }
+.notification-panel .notification-mark-all:disabled { color: var(--muted); opacity: .65; cursor: default; }
+.notification-panel .notification-search-wrap { position: relative; flex: none; padding: 0 16px 14px; }
+.notification-panel .notification-search-wrap svg { position: absolute; top: 12px; left: 28px; width: 17px; height: 17px; color: var(--muted); pointer-events: none; }
+.notification-panel .notification-search { display: block; box-sizing: border-box; width: 100%; height: 42px; min-height: 42px; margin: 0; padding: 9px 12px 9px 36px; border: 1px solid var(--border); border-radius: 10px; background: var(--panel-2); color: var(--text); font: 400 16px/1.3 var(--font); }
+.notification-panel .notification-search::placeholder { color: var(--muted); opacity: 1; }
+.notification-panel .notification-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; border-top: 1px solid var(--border); }
+.notification-panel .notification-list { display: block; overflow: visible; padding: 8px 16px 16px; }
+.notification-panel .notification-item, .notification-panel .notification-item.is-read { position: relative; display: flex; gap: 11px; margin: 0; padding: 16px 0; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; background: transparent; box-shadow: none; animation: none; opacity: 1; }
+.notification-panel .notification-item:last-child { border-bottom: 0; }
+.notification-panel .notification-dot { width: 8px; height: 8px; flex: 0 0 8px; margin-top: 6px; border-radius: 50%; background: var(--link); }
+.notification-panel .is-read .notification-dot { background: var(--border-2); }
+.notification-panel .notification-content { flex: 1; min-width: 0; }
+.notification-panel .notification-item-top { display: flex; align-items: center; gap: 8px; margin: 0 0 7px; }
+.notification-panel .notification-kind { padding: 0; border: 0; border-radius: 0; background: transparent; color: var(--link); font: 700 10px/1.3 var(--font); letter-spacing: .07em; text-transform: uppercase; }
+.notification-panel .notification-when { margin-left: auto; color: var(--muted); font: 400 11px/1.3 var(--font); white-space: nowrap; }
+.notification-panel .notification-item h3 { display: block; margin: 0 0 6px; color: var(--text); font: 700 15px/1.35 var(--font); letter-spacing: -.01em; }
+.notification-panel .notification-new { display: inline-block; margin: 0 0 0 7px; padding: 2px 6px; vertical-align: 2px; border-radius: 5px; background: var(--link); color: #fff; font: 700 9px/1.2 var(--font); letter-spacing: .04em; }
+.notification-panel .notification-item p { margin: 0; color: var(--muted); font: 400 13px/1.55 var(--font); }
+.notification-panel .notification-item-foot { display: flex; flex-direction: row; align-items: center; justify-content: flex-start; gap: 8px 16px; flex-wrap: wrap; margin: 10px 0 0; }
+.notification-panel .notification-cta, .notification-panel .notification-mark { width: auto; min-height: 32px; margin: 0; padding: 5px 0; border: 0; background: transparent; text-align: left; font: 600 12px/1.4 var(--font); }
+.notification-panel .notification-cta { color: var(--link); }
+.notification-panel .notification-mark { color: var(--muted); cursor: pointer; }
+.notification-panel .notification-mark:hover { color: var(--text); text-decoration: underline; }
+.notification-panel .notification-empty { padding: 42px 12px; text-align: center; color: var(--muted); font-size: 13px; }
+.notification-panel .om-notify-settings { margin: 12px 16px 4px; padding: 14px; border-radius: 10px; background: var(--panel-2); }
+.notification-panel .om-notify-row { flex-wrap: wrap; }
+.notification-panel .notification-foot { position: static; flex: none; padding: 11px 18px; border-top: 1px solid var(--border); background: var(--panel); color: var(--muted); font: 400 11px/1.4 var(--font); backdrop-filter: none; }
+@media (max-width: 600px) {
+  .notification-panel:not([hidden]) { top: calc(var(--header-h) + 8px); left: 8px; right: 8px; width: auto; height: min(680px, calc(100vh - var(--header-h) - 16px)); max-height: calc(100vh - var(--header-h) - 16px); border-radius: 16px; }
+  .notification-panel .notification-head { padding: 17px 16px 13px; }
+  .notification-panel .notification-controls { gap: 8px; }
+  .notification-panel .notification-tabs { flex: 1 1 100%; }
+}
+@supports (height: 100dvh) {
+  .notification-panel:not([hidden]) { max-height: calc(100dvh - var(--header-h) - 24px); }
+  @media (max-width: 600px) { .notification-panel:not([hidden]) { height: min(680px, calc(100dvh - var(--header-h) - 16px)); max-height: calc(100dvh - var(--header-h) - 16px); } }
+}
+
+/* Shared interaction polish, without altering content or layout semantics. */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
+.btn, .iconbtn { transition: background-color .16s ease, border-color .16s ease, color .16s ease, box-shadow .16s ease; }
+.btn:active, .iconbtn:active { transform: translateY(1px); }
+.om-feed-row, .om-project-card, .om-box, .om-dlstats { overflow-wrap: anywhere; }
+.om-feed-row:focus-visible, .om-project-card:focus-visible { outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) { .btn, .iconbtn { transition: none; } }
+
+/* Consistent surfaces and interaction details across the studio and project pages. */
+.om-project-card, .om-box, .om-source-list, .om-dlstats { border-radius: 14px; }
+.om-project-card, .om-source-row, .om-feed-row { transition: border-color .16s ease, background-color .16s ease, box-shadow .16s ease; }
+.om-project-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,.08); }
+.om-feed-row, .om-source-row { min-width: 0; }
+.om-feed-title, .om-source-name { line-height: 1.4; }
+.om-feed-summary, .om-source-desc, .om-box-text { line-height: 1.55; }
+.om-box-head { padding: 12px 16px; font-weight: 700; letter-spacing: .01em; }
+.om-project-tabs a, .om-page-tabs a { min-height: 44px; }
+.site-footer a { text-underline-offset: 3px; }
+.site-footer a:hover { color: var(--link); }
+@media (prefers-reduced-motion: reduce) { .om-project-card, .om-source-row, .om-feed-row { transition: none; } }

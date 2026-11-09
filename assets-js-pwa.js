@@ -1,28 +1,56 @@
 (function () {
-  if (window.__omPwaV31) return;
-  window.__omPwaV31 = true;
+  if (window.__omPwaV32) return;
+  window.__omPwaV32 = true;
   var root = document.documentElement.getAttribute('data-root') || '';
   var lang = document.documentElement.getAttribute('data-lang') === 'ru' ? 'ru' : 'en';
   var reg, deferred, refreshing = false;
   function reloadFresh() {
-    // Unique navigation bypasses a stale HTTP cache, without losing search or anchor.
     var url = new URL(window.location.href);
     url.searchParams.set('om-refresh', Date.now().toString());
     window.location.replace(url.toString());
   }
+  function failure() {
+    refreshing = false;
+    if (window.OMToast) window.OMToast.show({ kind: 'warning', title: lang === 'ru' ? 'Не удалось обновить сайт' : 'Could not update the site', body: lang === 'ru' ? 'Проверьте соединение и попробуйте снова. Сохранённая версия остаётся доступной.' : 'Check your connection and try again. Your saved version remains available.' });
+  }
   window.OMUpdateSite = function () {
     if (refreshing) return;
+    if (navigator.onLine === false) { failure(); return; }
     refreshing = true;
-    var done = false;
-    function finish() { if (!done) { done = true; reloadFresh(); } }
-    if (!reg) { finish(); return; }
-    // An old version may already be waiting. Don't block the user if offline.
-    navigator.serviceWorker.addEventListener('controllerchange', finish, { once: true });
-    var timeout = setTimeout(finish, 2500);
-    reg.update().catch(function () {}).then(function () {
-      if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
-      else { clearTimeout(timeout); finish(); }
-    });
+    // Do not discard the offline copy or reload until a network response is available.
+    var controller = typeof AbortController === 'function' ? new AbortController() : null;
+    var timeout = controller ? setTimeout(function () { controller.abort(); }, 10000) : null;
+    fetch(root + 'build.json?om-online-check=1&ts=' + Date.now(), { cache: 'no-store', signal: controller ? controller.signal : undefined }).then(function (r) {
+      if (timeout) clearTimeout(timeout);
+      if (!r.ok) throw new Error('Network check failed');
+      return r.json();
+    }).then(function (build) {
+      if (!build || !build.version) throw new Error('Invalid build');
+      if (!reg || !navigator.serviceWorker) { reloadFresh(); return; }
+      return reg.update().then(function () {
+        var worker = reg.waiting || reg.installing;
+        if (!worker) { reloadFresh(); return; }
+        return new Promise(function (resolve, reject) {
+          var finished = false;
+          var timer = setTimeout(function () { finish(false); }, 12000);
+          function finish(ok) {
+            if (finished) return; finished = true; clearTimeout(timer);
+            navigator.serviceWorker.removeEventListener('controllerchange', changed);
+            worker.removeEventListener('statechange', stateChanged);
+            if (ok) resolve(); else reject(new Error('Update did not activate'));
+          }
+          function changed() { finish(true); }
+          function stateChanged() {
+            if (worker.state === 'installed') worker.postMessage({ type: 'SKIP_WAITING' });
+            if (worker.state === 'activated' && navigator.serviceWorker.controller === worker) finish(true);
+            if (worker.state === 'redundant') finish(false);
+          }
+          navigator.serviceWorker.addEventListener('controllerchange', changed);
+          worker.addEventListener('statechange', stateChanged);
+          stateChanged();
+        }).then(reloadFresh);
+      });
+    }).catch(function () { if (timeout) clearTimeout(timeout); failure(); });
   };
   function notify() {
     if (!window.OMToast) return;
@@ -33,6 +61,8 @@
     window.addEventListener('load', function () {
       navigator.serviceWorker.register(root + 'sw.js', { scope: root || './', updateViaCache: 'none' }).then(function (registration) {
         reg = registration;
+        // Give in-flight requests from the previous worker time to settle.
+        setTimeout(function () { if (navigator.serviceWorker.controller) navigator.serviceWorker.controller.postMessage({ type: 'CLEAN_OLD_CACHES' }); }, 3000);
         if (reg.waiting && navigator.serviceWorker.controller) notify();
         reg.addEventListener('updatefound', function () {
           var worker = reg.installing;

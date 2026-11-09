@@ -89,7 +89,9 @@ Onyx Meridian Interactive Studio создаёт игровые системы д
 The website is static. Run `python3 -m http.server 8000` and open the local URL.
 For browser regression tests: `npm ci`, `npx playwright install chromium`, then `npm test`.
 
-When releasing an update, change `build.json`'s version and the cache name in `sw.js`.
+Before publishing, run `npm run release:prepare -- 33.0.0` (using a new version),
+then run the tests and commit the resulting HTML, cache and build metadata together.
+This synchronizes the page build identifier, asset URLs and service worker cache.
 If the legacy layer at the beginning of `assets-css-style.css` changes, regenerate
 `assets-css-legacy.css` from the contents of that layer. The fallback is loaded only
 by browsers without CSS cascade layer support. The download counter is a third-party,
