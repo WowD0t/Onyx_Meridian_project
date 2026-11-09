@@ -3014,18 +3014,12 @@ html[data-emblem="E"] .om-org-meta{padding:0}
 .om-palette-head .om-drawer-title{margin:0 0 4px}
 .om-palette-head .om-settings-hint{margin:0;font-size:11.5px;line-height:1.5}
 .om-palette-cards{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
-.om-accent-card{display:grid;grid-template-columns:76px minmax(0,1fr) 22px;gap:12px;align-items:center;width:100%;padding:10px;border:1px solid var(--border);border-radius:12px;background:var(--panel);cursor:pointer;text-align:left;font-family:var(--font);color:var(--text);position:relative;transition:border-color .14s,background .14s,box-shadow .14s}
+.om-accent-card{display:grid;grid-template-columns:96px minmax(0,1fr) 22px;gap:12px;align-items:center;width:100%;padding:10px;border:1px solid var(--border);border-radius:12px;background:var(--panel);cursor:pointer;text-align:left;font-family:var(--font);color:var(--text);position:relative;transition:border-color .14s,background .14s,box-shadow .14s}
 .om-accent-card:hover{border-color:var(--border-2);background:var(--panel-2)}
 .om-accent-card:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
 .om-accent-card.active{border-color:var(--ac);box-shadow:0 0 0 1px var(--ac)}
-.om-ac-preview{position:relative;width:76px;height:52px;border-radius:8px;overflow:hidden;display:block;border:1px solid var(--border)}
-.om-ac-preview .p-bg{position:absolute;inset:0;background:var(--bg)}
-.om-ac-preview .p-panel{position:absolute;inset:4px;background:var(--panel);border:1px solid var(--border);border-radius:6px}
-.om-ac-preview .p-t1{position:absolute;left:9px;top:9px;width:38px;height:4px;border-radius:2px;background:var(--text)}
-.om-ac-preview .p-t2{position:absolute;left:9px;top:17px;width:50px;height:3px;border-radius:2px;background:var(--muted)}
-.om-ac-preview .p-link{position:absolute;left:9px;top:25px;width:24px;height:3px;border-radius:2px;background:var(--ac)}
-.om-ac-preview .p-badge{position:absolute;right:8px;top:8px;width:16px;height:9px;border-radius:999px;border:1px solid var(--ac);background:color-mix(in srgb,var(--ac) 16%,transparent)}
-.om-ac-preview .p-btn{position:absolute;left:9px;bottom:8px;width:30px;height:10px;border-radius:4px;background:var(--ac)}
+.om-ac-preview{display:block;width:96px;height:64px;flex:none}
+.om-ac-preview .om-ac-svg{display:block;width:100%;height:100%}
 .om-ac-meta{display:flex;flex-direction:column;gap:3px;min-width:0}
 .om-ac-meta b{font-size:13px;font-weight:600}
 .om-ac-meta small{font-size:11px;color:var(--muted)}
@@ -3037,9 +3031,39 @@ html[data-emblem="E"] .om-org-meta{padding:0}
 .om-ac-check{width:20px;height:20px;border-radius:50%;background:var(--ac);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;opacity:0;transition:opacity .14s}
 .om-accent-card.active .om-ac-check{opacity:1}
 @media (max-width:400px){
-  .om-accent-card{grid-template-columns:64px minmax(0,1fr) 20px;gap:10px;padding:9px}
-  .om-ac-preview{width:64px;height:46px}
+  .om-accent-card{grid-template-columns:84px minmax(0,1fr) 20px;gap:10px;padding:9px}
+  .om-ac-preview{width:84px;height:56px}
 }
 @media (prefers-reduced-motion:reduce){
   .om-accent-card,.om-ac-check{transition:none}
 }
+
+html.om-wiki-page .menu-toggle{display:none!important}
+html.om-wiki-page .wiki-crumb{display:none}
+:root{--om-wiki-refresh:1}
+.wiki-shell{padding-left:clamp(16px,4vw,32px);padding-right:clamp(16px,4vw,32px)}
+html.om-wiki-page .om-breadcrumbs{background:transparent;border-bottom:0;margin:0 0 12px}
+html.om-wiki-page .om-breadcrumbs .container{padding:0;max-width:none}
+.wiki-toolbar-v13{margin:6px 0 20px;gap:8px}
+.wiki-mobile-bar{padding:10px clamp(16px,4vw,32px)}
+.wiki-title{margin-bottom:.35em}
+.wiki-lead{margin:0 0 18px;color:var(--muted);font-size:1.02rem;line-height:1.7}
+.wiki-meta{margin:0 0 22px}
+.wiki-body{max-width:78ch}
+.wiki-body h2{margin-top:1.6em}
+.wiki-body h3{margin-top:1.3em}
+.wiki-body p{margin:0 0 1em}
+.wiki-body .announce,.wiki-body .callout{padding:18px 20px;border-radius:12px}
+.wiki-prevnext{margin-top:34px}
+@media (max-width:860px){
+  .wiki-shell{padding-left:16px;padding-right:16px}
+  .wiki-toolbar-v13{margin:4px 0 18px}
+  .wiki-lead{font-size:1rem}
+}
+
+.wiki-body pre,.wiki-body table{max-width:100%;overflow-x:auto}
+.wiki-body pre{border-radius:10px}
+.wiki-body table{display:block;width:100%}
+.wiki-body img{border-radius:10px}
+.wiki-body blockquote{margin:1em 0;padding:12px 16px;border-left:3px solid var(--brand);background:var(--panel);border-radius:0 10px 10px 0;color:var(--muted)}
+.wiki-prevnext a{border-radius:12px}
