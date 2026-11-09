@@ -32,9 +32,9 @@
     var io = new IntersectionObserver(function (entries) { entries.forEach(function (en) { if (!en.isIntersecting) return; io.unobserve(en.target); prefetch(en.target.getAttribute('href')); }); }, { rootMargin: '160px' });
     document.querySelectorAll('a[href$=".html"]').forEach(function (a) { io.observe(a); });
   }
-  var build = null, updateShown = false;
+  var build = document.documentElement.getAttribute('data-build') || null, updateShown = false;
   function checkBuild() {
-    fetch(root + 'build.json?ts=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (j) {
+    fetch(root + 'build.json?om-online-check=1&ts=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (j) {
       if (!j || !j.version) return;
       if (build === null) { build = j.version; return; }
       if (j.version !== build && !updateShown) {
@@ -45,6 +45,7 @@
   }
   checkBuild();
   setInterval(function () { if (!document.hidden) checkBuild(); }, 120000);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) checkBuild(); });
   window.addEventListener('offline', function () { if (window.OMToast) window.OMToast.show({ kind: 'warning', title: T.offline }); });
   window.addEventListener('online', function () { if (window.OMToast) window.OMToast.show({ kind: 'success', title: T.online }); if (window.OMDownloadsRefresh) window.OMDownloadsRefresh(); if (window.OMCFRefresh) window.OMCFRefresh(); });
   setInterval(function () { if (document.hidden) return; if (window.OMDownloadsRefresh) window.OMDownloadsRefresh(); if (window.OMCFRefresh) window.OMCFRefresh(); }, 300000);

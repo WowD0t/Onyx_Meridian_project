@@ -47,6 +47,7 @@ test('a missing source does not turn into a misleading total', async ({ page }) 
   await page.goto('/ru-index.html');
   await expect(page.locator('[data-cf-downloads]').first()).toHaveText('213');
   await expect(page.locator('[data-dlstats-total]').first()).toHaveText('—');
+  await expect(page.locator('[data-dlstats-seg="cf"]').first()).toHaveCSS('width', '0px');
 });
 
 test('refresh keeps search and anchor and cached pages open offline', async ({ page, context }) => {
@@ -58,7 +59,9 @@ test('refresh keeps search and anchor and cached pages open offline', async ({ p
   await expect(page.locator('#theme-btn')).toBeVisible();
   // Wait for the refreshed navigation to be cached before disabling the network.
   await page.waitForFunction(async () => {
-    const c = await caches.open('om-site-v31');
+    const key = (await caches.keys()).find(name => name.startsWith('om-site-v'));
+    if (!key) return false;
+    const c = await caches.open(key);
     return !!(await c.match(location.href, { ignoreSearch: true }));
   });
   await context.setOffline(true);
@@ -80,4 +83,47 @@ test('each direct-download click is recorded without device fingerprinting', asy
   await direct.click();
   await expect.poll(() => hits).toBe(2);
   expect(await page.evaluate(() => Object.keys(localStorage).filter(k => k.startsWith('om-dl-v2-1-5-')))).toEqual([]);
+});
+
+test('bulletin supports searching, filters, marking read and settings', async ({ page }) => {
+  await page.goto('/ru-index.html');
+  await page.locator('#notification-btn').click();
+  const panel = page.locator('#notification-panel');
+  await expect(panel).toBeVisible();
+  await expect(panel.locator('.notification-item')).toHaveCount(3);
+  await panel.locator('.notification-search').fill('лицензия');
+  await expect(panel.locator('.notification-item')).toHaveCount(1);
+  await panel.locator('.notification-search').fill('');
+  await panel.locator('.notification-mark').first().click();
+  await panel.locator('[data-focus-key="tab-unread"]').click();
+  await expect(panel.locator('.notification-item')).toHaveCount(2);
+  await panel.locator('[data-focus-key="settings"]').click();
+  await expect(panel.locator('.om-notify-settings')).toBeVisible();
+  await panel.locator('[data-focus-key="settings"]').click();
+  await panel.locator('[data-focus-key="mark-all"]').click();
+  await expect(panel.locator('.notification-empty')).toContainText('Непрочитанных');
+  await page.keyboard.press('Escape');
+  await expect(panel).toBeHidden();
+  await expect(page.locator('#notification-btn')).toBeFocused();
+  await page.reload();
+  await page.locator('#notification-btn').click();
+  await expect(panel.locator('.notification-item.is-read')).toHaveCount(3);
+});
+
+test('offline refresh reports failure and never substitutes a different asset version', async ({ page, context }) => {
+  await page.goto('/ru-index.html');
+  await page.waitForFunction(() => navigator.serviceWorker.controller);
+  await context.setOffline(true);
+  await page.evaluate(() => window.OMUpdateSite());
+  await expect(page.locator('.om-toast').filter({ hasText: 'Не удалось обновить сайт' })).toBeVisible();
+  expect(await page.evaluate(async () => {
+    try { await fetch('assets-css-style.css?v=missing'); return false; } catch (_) { return true; }
+  })).toBe(true);
+  await expect(page.locator('#theme-btn')).toBeVisible();
+});
+
+test('a newer build is detected even on the first check', async ({ page }) => {
+  await page.route('**/build.json?**', route => route.fulfill({ json: { version: '99.0.0' } }));
+  await page.goto('/ru-index.html');
+  await expect(page.locator('.om-toast').filter({ hasText: '99.0.0' })).toBeVisible();
 });

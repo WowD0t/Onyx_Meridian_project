@@ -38,7 +38,7 @@
     var totalEl = card.querySelector('[data-dlstats-total]');
     if (totalEl) totalEl.textContent = known ? fmt(total) : '—';
     card.setAttribute('data-state', known ? 'ready' : 'loading');
-    var sp = pct(s, total), cp = total > 0 ? 100 - sp : 0;
+    var sp = known ? pct(s, total) : 0, cp = known && total > 0 ? 100 - sp : 0;
     var segSite = card.querySelector('[data-dlstats-seg="site"]');
     var segCf = card.querySelector('[data-dlstats-seg="cf"]');
     if (segSite) segSite.style.width = sp + '%';
@@ -48,7 +48,7 @@
     if (pSite) pSite.textContent = known ? sp + '%' : '—';
     if (pCf) pCf.textContent = known ? cp + '%' : '—';
     var bar = card.querySelector('.om-dlstats-bar');
-    if (bar) { bar.setAttribute('title', (lang === 'ru' ? 'С сайта ' : 'Site ') + sp + '% · CurseForge ' + cp + '%'); }
+    if (bar) { bar.setAttribute('title', known ? (lang === 'ru' ? 'С сайта ' : 'Site ') + sp + '% · CurseForge ' + cp + '%' : (lang === 'ru' ? 'Недостаточно данных' : 'Not enough data')); }
     var note = card.querySelector('[data-dlstats-note]');
     if (note) {
       var cfEl = card.querySelector('[data-cf-counter]');
