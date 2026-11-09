@@ -3,8 +3,8 @@
   window.__omDownloadStatsV27 = true;
   var lang = document.documentElement.getAttribute('data-lang') === 'ru' ? 'ru' : 'en';
   var T = lang === 'ru'
-    ? { total: 'всего скачиваний', note: 'Сумма прямых загрузок .mcaddon с сайта и загрузок CurseForge.', stale: 'Показаны сохранённые данные CurseForge.', updated: 'Обновлено', refresh: 'Обновить статистику', share: 'доля' }
-    : { total: 'total downloads', note: 'Direct .mcaddon downloads from this site plus CurseForge downloads.', stale: 'Showing cached CurseForge data.', updated: 'Updated', refresh: 'Refresh statistics', share: 'share' };
+    ? { total: 'оценка всего', note: 'Оценка: нажатия на скачивание с сайта и данные CurseForge. Старые данные учитывались иначе; счётчик может быть недоступен или неточен.', stale: 'Показаны сохранённые данные CurseForge.', updated: 'Обновлено', refresh: 'Обновить статистику', share: 'доля' }
+    : { total: 'estimated total', note: 'Estimate: download clicks on this site plus CurseForge data. Older data was counted differently; the external counter may be unavailable or inaccurate.', stale: 'Showing cached CurseForge data.', updated: 'Updated', refresh: 'Refresh statistics', share: 'share' };
   function fmt(n) { try { return Number(n).toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-US'); } catch (e) { return String(n); } }
   function readNum(el) {
     if (!el) return null;
@@ -12,8 +12,8 @@
     return t ? parseInt(t, 10) : null;
   }
   function pct(part, total) { return total > 0 ? Math.round(part / total * 100) : 0; }
-  var SHORT = lang === 'ru' ? { site: 'С сайта', cf: 'CurseForge' } : { site: 'From site', cf: 'CurseForge' };
-  var HERO = lang === 'ru' ? { label: 'Всего скачиваний:', title: 'Сайт + CurseForge' } : { label: 'Total downloads:', title: 'Site + CurseForge' };
+  var SHORT = lang === 'ru' ? { site: 'Запросы с сайта', cf: 'CurseForge' } : { site: 'Site clicks', cf: 'CurseForge' };
+  var HERO = lang === 'ru' ? { label: 'Оценка скачиваний:', title: 'Сайт + CurseForge' } : { label: 'Estimated downloads:', title: 'Site + CurseForge' };
   function updateHeroTotal(site, cf) {
     var hero = document.querySelector('[data-hero-total]');
     if (!hero) return;
@@ -32,7 +32,7 @@
     if (cl) { cl.textContent = SHORT.cf; cl.setAttribute('title', lang === 'ru' ? 'Открыть проект на CurseForge' : 'Open the project on CurseForge'); }
     var site = readNum(card.querySelector('[data-download-count]'));
     var cf = readNum(card.querySelector('[data-cf-downloads]'));
-    var known = site !== null || cf !== null;
+    var known = site !== null && cf !== null;
     var s = site || 0, c = cf || 0, total = s + c;
     updateHeroTotal(site, cf);
     var totalEl = card.querySelector('[data-dlstats-total]');
