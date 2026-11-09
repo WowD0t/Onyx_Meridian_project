@@ -59,7 +59,7 @@
     if (e.code === 'KeyM') { e.preventDefault(); if (window.OMMenu) window.OMMenu.open(); return; }
     if (e.code === 'KeyS') { e.preventDefault(); if (window.OMSettings) window.OMSettings.open(); return; }
     if (e.code === 'KeyT') { e.preventDefault(); var t = document.getElementById('theme-btn'); if (t) t.click(); return; }
-    if (e.code === 'KeyL') { e.preventDefault(); var l = document.getElementById('lang-btn'); if (l) l.click(); return; }
+    if (e.code === 'KeyL') { e.preventDefault(); if (window.OMLanguage) window.OMLanguage.open(); else { var l = document.getElementById('lang-btn'); if (l) l.click(); } return; }
     if (e.code === 'KeyN') { e.preventDefault(); var n = document.getElementById('notification-btn'); if (n) n.click(); return; }
   });
   window.OMHotkeys = { open: open, close: close };

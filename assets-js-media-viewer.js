@@ -7,6 +7,7 @@
     : { zoomIn: 'Zoom in', zoomOut: 'Zoom out', reset: 'Reset', original: 'Original', close: 'Close' };
   var viewer = document.createElement('div');
   viewer.className = 'om-media-viewer';
+  viewer.style.cssText = 'position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;flex-direction:column;background:rgba(4,6,10,.92)';
   viewer.setAttribute('role', 'dialog');
   viewer.setAttribute('aria-modal', 'true');
   viewer.innerHTML = '<div class="om-media-cap"></div><div class="om-media-stage"><img alt=""></div><div class="om-media-bar"><button type="button" data-mv="out" aria-label="' + labels.zoomOut + '">−</button><span class="om-media-zoom">100%</span><button type="button" data-mv="in" aria-label="' + labels.zoomIn + '">+</button><button type="button" data-mv="reset" aria-label="' + labels.reset + '">1:1</button><a data-mv="original" target="_blank" rel="noopener">' + labels.original + '</a><button type="button" data-mv="close" aria-label="' + labels.close + '">✕</button></div>';
@@ -28,10 +29,12 @@
     original.href = src;
     scale = 1; tx = 0; ty = 0; apply();
     viewer.classList.add('open');
+    viewer.style.display = 'flex';
     document.body.style.overflow = 'hidden';
   }
   function close() {
     viewer.classList.remove('open');
+    viewer.style.display = 'none';
     document.body.style.overflow = '';
     img.src = '';
   }

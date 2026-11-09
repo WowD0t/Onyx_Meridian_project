@@ -4,7 +4,16 @@
   var BASE = 'https://countapi.mileshilliard.com/api/v1';
   var KEY = 'onyx-meridian-gloamguise-v2-1-5-downloads';
   var lang = document.documentElement.getAttribute('data-lang') === 'ru' ? 'ru' : 'en';
-  var label = lang === 'ru' ? 'скачиваний с сайта' : 'site downloads';
+  function labelFor(n) {
+    n = Number(n) || 0;
+    if (lang !== 'ru') return n === 1 ? 'Site download' : 'Site downloads';
+    var a = Math.abs(n) % 100, b = a % 10;
+    if (a > 10 && a < 20) return 'Скачиваний с сайта';
+    if (b === 1) return 'Скачивание с сайта';
+    if (b > 1 && b < 5) return 'Скачивания с сайта';
+    return 'Скачиваний с сайта';
+  }
+  var label = labelFor(0);
   var countedLabel = lang === 'ru' ? 'Скачивание засчитано' : 'Download counted';
   function hash(str) { var h = 5381; for (var i = 0; i < str.length; i++) h = ((h << 5) + h) + str.charCodeAt(i); return (h >>> 0).toString(36); }
   var fp = hash([navigator.userAgent, navigator.language, screen.width + 'x' + screen.height, new Date().getTimezoneOffset(), navigator.platform || ''].join('|'));
@@ -40,7 +49,7 @@
   }
   function mark() { localSet(); cookieSet(); idbSet(); }
   function fmt(n) { try { return Number(n).toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-US'); } catch (e) { return String(n); } }
-  function render(n) { Array.prototype.forEach.call(document.querySelectorAll('[data-download-count]'), function (el) { el.textContent = fmt(n); }); }
+  function render(n) { Array.prototype.forEach.call(document.querySelectorAll('[data-download-count]'), function (el) { el.textContent = fmt(n); }); Array.prototype.forEach.call(document.querySelectorAll('[data-download-label]'), function (el) { el.textContent = labelFor(n); }); }
   function get() { fetch(BASE + '/get/' + KEY, { headers: { 'Accept': 'application/json' } }).then(function (r) { return r.json(); }).then(function (j) { if (j && typeof j.value !== 'undefined') render(j.value); }).catch(function () {}); }
   function hit() {
     return fetch(BASE + '/hit/' + KEY, { headers: { 'Accept': 'application/json' }, keepalive: true }).then(function (r) { return r.json(); }).then(function (j) { if (j && typeof j.value !== 'undefined') render(j.value); return j; }).catch(function () {});
@@ -50,7 +59,7 @@
       if (panel.querySelector('.download-counter')) return;
       var div = document.createElement('div');
       div.className = 'download-counter';
-      div.innerHTML = '<strong data-download-count>—</strong><span>' + label + '</span>';
+      div.innerHTML = '<strong data-download-count>—</strong><span data-download-label>' + label + '</span>';
       panel.appendChild(div);
     });
     Array.prototype.forEach.call(document.querySelectorAll('.hero-actions'), function (actions) {
@@ -59,7 +68,7 @@
       if (!a) return;
       var span = document.createElement('span');
       span.className = 'download-counter-inline';
-      span.innerHTML = '<strong data-download-count>—</strong> ' + label;
+      span.innerHTML = '<strong data-download-count>—</strong> <span data-download-label>' + label + '</span>';
       actions.appendChild(span);
     });
     get();
@@ -80,4 +89,18 @@
   }, true);
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount);
   else mount();
+  window.OMDownloadsRefresh = get;
 })();
+document.addEventListener('click', function (e) {
+  var btn = e.target.closest('[data-copy-sha]');
+  if (!btn) return;
+  var sha = btn.getAttribute('data-copy-sha');
+  function done(ok) {
+    var old = btn.textContent;
+    btn.textContent = ok ? '✓' : '!';
+    setTimeout(function () { btn.textContent = old; }, 1200);
+    if (window.OMToast) window.OMToast.show({ kind: ok ? 'success' : 'warning', title: document.documentElement.getAttribute('data-lang') === 'ru' ? (ok ? 'SHA-256 скопирован' : 'Не удалось скопировать') : (ok ? 'SHA-256 copied' : 'Copy failed'), body: sha.slice(0, 16) + '…', timeout: 2600 });
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(sha).then(function () { done(true); }, function () { done(false); });
+  else done(false);
+});

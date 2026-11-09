@@ -1,6 +1,14 @@
 window.OM_FORM = {
-  provider: 'web3forms',
+  provider: 'apps-script',
+  appsScriptEndpoint: '',
+  appsScriptSiteKey: '',
+  fallbackProvider: 'web3forms',
   endpoint: 'https://api.web3forms.com/submit',
   accessKey: 'd673d14a-9e48-4d90-9e21-77e131d5fe4b',
-  email: 'yarik.internet@atomicmail.io'
+  email: 'yarik.internet@atomicmail.io',
+  attachmentMode: 'links',
+  uploadEndpoint: 'https://tmpfiles.org/api/v1/upload',
+  gasMaxTotalBytes: 8388608,
+  gasMaxFiles: 5,
+  requestTimeoutMs: 30000
 };
