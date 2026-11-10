@@ -22,10 +22,11 @@
     var s = ensure();
     var key = opts.id || (opts.title || '') + '|' + (opts.body || '');
     if (active[key]) return active[key].dismiss;
-    while (s.children.length >= 4) s.firstChild.remove();
+    while (s.children.length >= 4) { var first = s.firstChild; if (first._dismiss) first._dismiss(true); else first.remove(); }
     var el = document.createElement('div');
-    el.className = 'om-toast';
+    el.className = 'om-toast' + (/^(success|error|warning)$/.test(opts.kind) ? ' ' + opts.kind : '');
     el.innerHTML = '<div class="om-toast-ico">' + icon(opts.kind) + '</div><div class="om-toast-content"><strong></strong><p></p><div class="om-toast-actions"></div></div><button type="button" class="om-toast-close" aria-label="Close">×</button><i class="om-toast-progress"></i>';
+    el.querySelector('.om-toast-close').setAttribute('aria-label', document.documentElement.getAttribute('data-lang') === 'ru' ? 'Закрыть уведомление' : 'Close notification');
     el.querySelector('strong').textContent = opts.title || '';
     el.querySelector('p').textContent = opts.body || '';
     if (!opts.title) el.querySelector('strong').remove();
@@ -42,24 +43,36 @@
     s.appendChild(el);
     requestAnimationFrame(function () { requestAnimationFrame(function () { el.classList.add('in'); }); });
     var timeout = typeof opts.timeout === 'number' ? opts.timeout : 5600;
-    var timer = null, start = Date.now(), remaining = timeout, progress = el.querySelector('.om-toast-progress');
+    var timer = null, frame = null, start = Date.now(), remaining = timeout, progress = el.querySelector('.om-toast-progress'), dismissed = false, paused = false;
     function tick() {
-      if (!timeout) { progress.style.display = 'none'; return; }
+      if (!timeout || paused || dismissed) return;
       var left = Math.max(0, remaining - (Date.now() - start));
       progress.style.transform = 'scaleX(' + (left / timeout) + ')';
-      if (left <= 0) dismiss();
+      if (left > 0) frame = requestAnimationFrame(tick);
     }
-    function arm() { if (!timeout) return; start = Date.now(); timer = setTimeout(dismiss, remaining); requestAnimationFrame(tick); }
-    function pause() { if (!timeout) return; clearTimeout(timer); remaining = Math.max(0, remaining - (Date.now() - start)); }
-    function dismiss() {
-      clearTimeout(timer);
+    function arm() {
+      if (!timeout || dismissed) { if (!timeout) progress.hidden = true; return; }
+      paused = false; start = Date.now(); clearTimeout(timer); cancelAnimationFrame(frame);
+      timer = setTimeout(dismiss, remaining); frame = requestAnimationFrame(tick);
+    }
+    function pause() {
+      if (!timeout || paused || dismissed) return;
+      paused = true; clearTimeout(timer); cancelAnimationFrame(frame);
+      remaining = Math.max(0, remaining - (Date.now() - start));
+    }
+    function dismiss(immediate) {
+      if (dismissed) return;
+      dismissed = true; clearTimeout(timer); cancelAnimationFrame(frame);
       delete active[key];
-      el.classList.add('out');
-      setTimeout(function () { el.remove(); }, 380);
+      if (immediate === true) el.remove();
+      else { el.classList.add('out'); setTimeout(function () { el.remove(); }, 380); }
     }
+    el._dismiss = dismiss;
     el.addEventListener('mouseenter', pause);
-    el.addEventListener('mouseleave', arm);
-    el.querySelector('.om-toast-close').addEventListener('click', dismiss);
+    el.addEventListener('mouseleave', function () { if (!el.contains(document.activeElement)) arm(); });
+    el.addEventListener('focusin', pause);
+    el.addEventListener('focusout', function (e) { if (!el.contains(e.relatedTarget) && !el.matches(':hover')) arm(); });
+    el.querySelector('.om-toast-close').addEventListener('click', function () { dismiss(); });
     active[key] = { dismiss: dismiss };
     arm();
     return dismiss;
