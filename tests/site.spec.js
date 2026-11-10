@@ -127,3 +127,72 @@ test('a newer build is detected even on the first check', async ({ page }) => {
   await page.goto('/ru-index.html');
   await expect(page.locator('.om-toast').filter({ hasText: '99.0.0' })).toBeVisible();
 });
+
+for (const lang of ['ru', 'en']) {
+  test(`${lang} media: empty state replaces the unused player and catalogue`, async ({ page }) => {
+    await page.goto(`/${lang}-media.html`);
+    const root = page.locator('#om-player');
+    await expect(root).toHaveAttribute('data-state', 'empty');
+    await expect(page.locator('#om-empty-title')).toHaveText(lang === 'ru' ? 'Видео пока нет' : 'No videos yet');
+    await expect(page.locator('.om-media-empty-link')).toBeVisible();
+    await expect(page.locator('#library-section')).toBeHidden();
+    await expect(page.locator('.om-player-side')).toBeHidden();
+    await expect(page.locator('.media-actions')).toBeHidden();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  });
+}
+
+test('media load failure is distinct and can be retried', async ({ page }) => {
+  let attempts = 0;
+  await page.route('**/videos.json?*', route => {
+    attempts++;
+    return attempts === 1 ? route.fulfill({ status: 503, body: 'Unavailable' }) : route.fulfill({ json: { videos: [] } });
+  });
+  await page.goto('/ru-media.html');
+  await expect(page.locator('#om-player')).toHaveAttribute('data-state', 'error');
+  await expect(page.locator('#om-empty-title')).toHaveText('Не удалось загрузить медиатеку');
+  await expect(page.locator('.om-media-empty-link')).toBeHidden();
+  await page.locator('.om-media-retry').click();
+  await expect(page.locator('#om-player')).toHaveAttribute('data-state', 'empty');
+  // Once the worker takes control, the retry may bypass Playwright routing.
+});
+
+test('media with videos supports selection, filtering, search and empty search results', async ({ page }) => {
+  await page.route('**/videos.json?*', route => route.fulfill({ json: { videos: [
+    { id: 'one', title_ru: 'Первое видео', desc_ru: 'Описание', date: '2025-01-01', tags: ['Обзор'], chapters: [], sources: [{ platform: 'file', url: 'missing.mp4' }] },
+    { id: 'two', title_ru: 'Второе видео', date: '2026-01-01', tags: ['Гайд'], chapters: [{ t: 0, ru: 'Начало' }], sources: [{ platform: 'file', url: 'missing.mp4' }] }
+  ] } }));
+  await page.goto('/ru-media.html');
+  await expect(page.locator('#om-player')).toHaveAttribute('data-state', 'ready');
+  await expect(page.locator('#library-section')).toBeVisible();
+  await expect(page.locator('#om-title')).toHaveText('Первое видео');
+  await expect(page.locator('#om-chapters').locator('..')).toBeHidden();
+  await expect(page.locator('#om-video-library .om-video-card').first()).toContainText('Второе видео');
+  await page.locator('#om-video-library .om-video-card').first().click();
+  await expect(page.locator('#om-title')).toHaveText('Второе видео');
+  await expect(page.locator('#om-chapters')).toContainText('Начало');
+  await page.locator('#om-library-filters button', { hasText: 'Гайд' }).click();
+  await expect(page.locator('#om-video-library .om-video-card')).toHaveCount(1);
+  await page.locator('#om-library-search').fill('нет такого видео');
+  await expect(page.locator('.om-library-empty')).toContainText('Ничего не найдено');
+  await expect(page.locator('.om-library-empty')).not.toContainText('Видео пока нет');
+  const search = await page.locator('#om-library-search').boundingBox();
+  expect(search.height).toBeGreaterThanOrEqual(40);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test('media uses cached video data when offline', async ({ page, context }) => {
+  await page.goto('/ru-media.html');
+  await expect(page.locator('#om-player')).toHaveAttribute('data-state', 'empty');
+  await page.waitForFunction(() => navigator.serviceWorker.controller);
+  // Reload under the controlling worker so videos.json enters the site cache.
+  await page.reload();
+  await expect(page.locator('#om-player')).toHaveAttribute('data-state', 'empty');
+  await page.waitForFunction(async () => {
+    const c = await caches.open((await caches.keys()).find(k => k.startsWith('om-site-v')));
+    return !!(await c.match(new URL('videos.json', location.href)));
+  });
+  await context.setOffline(true);
+  await page.reload();
+  await expect(page.locator('#om-player')).toHaveAttribute('data-state', 'empty');
+});
