@@ -97,3 +97,28 @@ If the legacy layer at the beginning of `assets-css-style.css` changes, regenera
 by browsers without CSS cascade layer support. The download counter is a third-party,
 best-effort click estimate, not a verified download count; previous values used a
 per-device rule. Accurate counts require a server-side download endpoint and storage.
+
+### Support form diagnostics
+
+The primary Apps Script URL is configured in `assets-js-form-config.js`. Its
+`?action=health` response only checks the deployed script and mail quota; it does
+not prove a form submission or delivery to the configured mailboxes. After any
+change, test a real request without attachments, then one with an attachment,
+from the published site and check both recipient inboxes and spam folders.
+
+A confirmed rejection from Apps Script is shown with a safe error code. In the
+supplied server script, `site-key` means the site's `appsScriptSiteKey` and the
+script property `SITE_KEY` differ; `owner-not-configured` means the recipient
+property needs attention; `mail-quota` is a Google mail quota issue. Verify the
+web app is deployed as the owner with access for everyone and that the latest
+version is deployed. A key included in public JavaScript is not a secret.
+
+If the response is lost or blocked, delivery is **unknown**, not necessarily
+failed: the form does not automatically use Web3Forms in this case. The visitor
+can explicitly select the fallback, with a warning about possible duplicates.
+Retrying the unchanged request through the primary channel uses the same ID so
+the supplied script's short-lived deduplication can help. Neither deduplication
+nor delivery is guaranteed when a server response is lost. Fallback attachments
+are uploaded to tmpfiles.org as temporary public links, as the form explains.
+Never include personal message contents, email addresses, or keys in public
+bug reports or screenshots.

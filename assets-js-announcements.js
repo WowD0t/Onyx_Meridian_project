@@ -10,7 +10,7 @@
   try { dismissed = JSON.parse(localStorage.getItem(dismissedKey) || '{}'); } catch (e) {}
   var lastIds = null;
   function resolveUrl(u) {
-    if (!u) return lang === 'ru' ? 'index.html' : 'index.html';
+    if (!u) return '';
     if (/^(https?:)?\/\//.test(u) || /^(mailto|tel|#)/.test(u)) return u;
     if (root === '') return u;
     var m = u.match(/^(en|ru)-(.+)$/);

@@ -18,6 +18,8 @@
   var status = document.getElementById('support-status'), submit = document.getElementById('support-submit'), mailto = document.getElementById('support-mailto'), success = document.getElementById('support-success');
   var count = document.getElementById('message-count'), keyInput = document.getElementById('web3forms-key'), redirect = document.getElementById('support-redirect');
   var draftKey = 'om-support-draft-v3', picker = null, uploadConsent = null, sending = false;
+  var requestId = null, revision = 0, pendingFallback = null;
+  var fallbackButton = document.getElementById('support-fallback');
   var gasEnabled = !!(cfg.appsScriptEndpoint && /script\.google\.com|script\.googleusercontent\.com/.test(cfg.appsScriptEndpoint));
   var consentMain = lang === 'ru'
     ? (gasEnabled ? 'Я соглашаюсь, что моё сообщение и почта для ответа обрабатываются основным каналом Google Apps Script и доставляются на почту студии. При сбое может использоваться резервный канал. Я не буду отправлять пароли, платёжные данные или личные файлы миров.' : 'Я соглашаюсь, что моё сообщение и почта для ответа обрабатываются резервным каналом Web3Forms и доставляются на почту студии. Я не буду отправлять пароли, платёжные данные или личные файлы миров.')
@@ -28,7 +30,7 @@
     if (consentSpan) consentSpan.innerHTML = consentMain + ' <span class="req">*</span>';
   }
   if (window.OMFilePicker) {
-    picker = window.OMFilePicker.create({ onChange: syncAttachmentConsent, hint: gasEnabled ? (lang === 'ru' ? 'Скриншоты, логи, документы. До 8 МБ суммарно для основного канала.' : 'Screenshots, logs, documents. Up to 8 MB total for the primary channel.') : undefined });
+    picker = window.OMFilePicker.create({ onChange: function () { syncAttachmentConsent(); invalidateRequest(); }, hint: gasEnabled ? (lang === 'ru' ? 'Скриншоты, логи, документы. До 8 МБ суммарно для основного канала.' : 'Screenshots, logs, documents. Up to 8 MB total for the primary channel.') : undefined });
     var msgSection = message ? message.closest('.support-section') : null;
     if (msgSection) msgSection.appendChild(picker.el); else form.appendChild(picker.el);
     var privacy = document.createElement('div');
@@ -41,11 +43,17 @@
     badge.id = 'support-channel';
     badge.className = 'support-channel-badge';
     badge.innerHTML = '<span class="status-pill ok">' + S.primaryBadge + '</span><span class="status-pill warn">' + S.fallbackBadge + '</span>';
-    if (!gasEnabled) badge.firstChild.classList.replace('ok', 'unknown');
+    badge.firstChild.classList.remove('ok');
+    badge.lastChild.classList.remove('warn');
     picker.el.insertBefore(badge, privacy);
   }
   if (keyInput && cfg.accessKey) keyInput.value = cfg.accessKey;
   if (redirect) redirect.value = window.location.origin + window.location.pathname + '?sent=1';
+  function invalidateRequest() {
+    if (pendingFallback && !sending) setStatus('');
+    revision++; requestId = null; pendingFallback = null;
+    if (fallbackButton) fallbackButton.hidden = true;
+  }
   function syncAttachmentConsent() {
     if (!picker || !uploadConsent) return;
     var has = picker.getFiles().length > 0;
@@ -145,14 +153,18 @@
     var ctrl = new AbortController();
     var t = setTimeout(function () { ctrl.abort(); }, timeout || cfg.requestTimeoutMs || 30000);
     return fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload), signal: ctrl.signal, redirect: 'follow' }).then(function (r) {
-      clearTimeout(t);
       return r.text().then(function (text) {
         var j = null;
         try { j = JSON.parse(text); } catch (e) {}
-        if (!r.ok || !j || j.ok !== true) { var err = new Error('primary'); err.explicit = !!j; throw err; }
-        return j;
+        if (r.ok && j && j.ok === true) return j;
+        var err = new Error('primary');
+        // Only known, pre-send rejections are certain. An HTTP/CORS error, malformed
+        // response or server exception may occur after the email has been sent.
+        var safe = ['empty', 'payload', 'spam', 'site-key', 'id', 'email', 'message', 'consent', 'too-many-files', 'attachment', 'attachments-too-large', 'rate-global', 'rate-user', 'owner-not-configured', 'mail-quota'];
+        err.code = j && typeof j.code === 'string' && safe.indexOf(j.code) !== -1 ? j.code : '';
+        throw err;
       });
-    }).catch(function (e) { clearTimeout(t); throw e; });
+    }).finally(function () { clearTimeout(t); });
   }
   function uploadFile(item) {
     return new Promise(function (resolve, reject) {
@@ -203,13 +215,17 @@
       });
     });
   }
-  function finish(result) {
+  function finish(result, sentRevision) {
     sending = false;
+    requestId = null; pendingFallback = null;
+    if (fallbackButton) fallbackButton.hidden = true;
     if (submit) { submit.disabled = false; submit.textContent = S.send; }
     if (success) { success.hidden = false; success.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
     setStatus(result && result.fallback ? S.okFallback : S.ok, 'success');
-    try { localStorage.removeItem(draftKey); } catch (e) {}
-    if (picker) picker.clear();
+    if (sentRevision === undefined || revision === sentRevision) {
+      try { localStorage.removeItem(draftKey); } catch (e) {}
+      if (picker) picker.clear();
+    }
     if (window.OMToast) window.OMToast.show({ kind: 'success', title: result && result.fallback ? S.okFallback : S.ok, timeout: 5000 });
   }
   function fail(msg) {
@@ -224,11 +240,15 @@
     if (sending || !validate()) return;
     sending = true;
     if (submit) { submit.disabled = true; submit.textContent = S.sendingPrimary; }
-    var id = newId();
+    var id = requestId || (requestId = newId());
+    var sentRevision = revision;
+    pendingFallback = null;
+    if (fallbackButton) fallbackButton.hidden = true;
+    if (success) success.hidden = true;
     var files = picker ? picker.getFiles() : [];
     if (!gasEnabled) {
       setStatus(S.sendingFallback, 'info');
-      sendFallback(id, 'primary-not-configured').then(finish).catch(function (err) { fail(String(err.message) === 'upload' ? S.attachFail : S.fail); });
+      sendFallback(id, 'primary-not-configured').then(function (result) { finish(result, sentRevision); }).catch(function (err) { fail(String(err.message) === 'upload' ? S.attachFail : S.fail); });
       return;
     }
     var total = files.reduce(function (n, f) { return n + f.file.size; }, 0);
@@ -240,7 +260,7 @@
     setStatus(S.sendingPrimary, 'info');
     Promise.all(files.map(function (item) {
       return readBase64(item.file).then(function (data) { return { name: item.file.name, type: item.file.type || 'application/octet-stream', size: item.file.size, data: data }; });
-    })).then(function (attachments) {
+    })).catch(function () { var error = new Error('file-read'); error.local = true; throw error; }).then(function (attachments) {
       var payload = {
         id: id,
         site: 'onyx-meridian',
@@ -263,17 +283,37 @@
         timestamp: new Date().toISOString()
       };
       return postJson(cfg.appsScriptEndpoint, payload).then(function () { return { fallback: false }; });
-    }).then(finish).catch(function () {
-      setStatus(S.sendingFallback, 'info');
-      return sendFallback(id, 'primary-failed').then(finish).catch(function (err) { fail(String(err.message) === 'upload' ? S.attachFail : S.fail); });
+    }).then(function (result) { finish(result, sentRevision); }).catch(function (err) {
+      if (err.local) {
+        fail(lang === 'ru' ? 'Не удалось прочитать вложение. Выберите файл заново.' : 'Could not read an attachment. Please select it again.');
+        return;
+      }
+      var changed = revision !== sentRevision;
+      var details = err.code ? (lang === 'ru' ? 'Основной канал отклонил обращение. Код: ' : 'The primary channel rejected the request. Code: ') + err.code + '. ' :
+        (lang === 'ru' ? 'Не удалось подтвердить отправку через основной канал. Письмо могло быть доставлено. ' : 'We could not confirm delivery through the primary channel. The email may have been sent. ');
+      details += changed ? (lang === 'ru' ? 'Поля изменились во время отправки. Проверьте их перед повторной отправкой.' : 'Fields changed during submission. Review them before sending again.') :
+        (lang === 'ru' ? 'Можно отправить через резерв; при потере ответа возможен дубликат.' : 'You can use the fallback; a lost response may result in a duplicate.');
+      if (!changed) { pendingFallback = { id: id, reason: err.code ? 'primary-' + err.code : 'primary-unconfirmed' }; if (fallbackButton) fallbackButton.hidden = false; }
+      fail(details);
+    });
+  });
+  if (fallbackButton) fallbackButton.addEventListener('click', function () {
+    if (sending || !pendingFallback || !validate()) return;
+    var pending = pendingFallback, fallbackRevision = revision; pendingFallback = null; fallbackButton.hidden = true; sending = true;
+    if (submit) { submit.disabled = true; submit.textContent = S.sendingFallback; }
+    setStatus(S.sendingFallback, 'info');
+    sendFallback(pending.id, pending.reason).then(function (result) { finish(result, fallbackRevision); }).catch(function (err) {
+      if (revision === fallbackRevision) { pendingFallback = pending; fallbackButton.hidden = false; }
+      fail(String(err.message) === 'upload' ? S.attachFail : S.fail);
     });
   });
   if (message) message.addEventListener('input', function () { syncCount(); saveDraft(); });
-  form.addEventListener('input', saveDraft);
-  form.addEventListener('change', saveDraft);
+  form.addEventListener('input', function () { invalidateRequest(); saveDraft(); });
+  form.addEventListener('change', function () { invalidateRequest(); saveDraft(); });
+  form.addEventListener('reset', function () { invalidateRequest(); setStatus(''); if (success) success.hidden = true; if (picker) picker.clear(); setTimeout(syncCount, 0); });
   if (mailto) mailto.addEventListener('click', function () {
     var body = buildRussianMessage([], 'mailto', '');
-    mailto.href = 'mailto:' + (cfg.email || '') + '?subject=' + encodeURIComponent(buildSubject('mailto')) + '&body=' + encodeURIComponent(body);
+    window.location.href = 'mailto:' + (cfg.email || '') + '?subject=' + encodeURIComponent(buildSubject('mailto')) + '&body=' + encodeURIComponent(body);
   });
   restoreDraft();
   syncCount();

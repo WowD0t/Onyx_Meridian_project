@@ -179,15 +179,15 @@
   window.addEventListener('pageshow', function () { panel.classList.remove('open'); panel.hidden = true; isOpen = false; button.setAttribute('aria-expanded', 'false'); render(); });
   function notify(item) {
     if (!catAllowed(item.kind) || quietNow()) return;
-    if (prefs.toasts && window.OMToast) window.OMToast.show({ id: 'ann-' + item.id, title: item.title[lang], body: item.body[lang], timeout: 9000, actions: item.href ? [{ label: item.cta ? item.cta[lang] : text.open, primary: true, onClick: function () { read[item.id] = true; saveRead(); window.location.href = item.href; } }] : [] });
-    if (prefs.browser && 'Notification' in window && Notification.permission === 'granted' && document.hidden) {
+    if (item.toast !== false && prefs.toasts && window.OMToast) window.OMToast.show({ id: 'ann-' + item.id, title: item.title[lang], body: item.body[lang], timeout: 9000, actions: item.href ? [{ label: item.cta ? item.cta[lang] : text.open, primary: true, onClick: function () { read[item.id] = true; saveRead(); window.location.href = item.href; } }] : [] });
+    if (item.browser === true && prefs.browser && 'Notification' in window && Notification.permission === 'granted') {
       try { new Notification(item.title[lang], { body: item.body[lang], tag: item.id }); } catch (e) {}
     }
   }
   document.addEventListener('om:announcements', function (e) {
     var incoming = (e.detail && e.detail.items) || [];
     var fresh = (e.detail && e.detail.fresh) || [];
-    var added = [];
+    var added = [], previousCount = items.length;
     incoming.forEach(function (a) {
       var ex = items.filter(function (i) { return i.id === a.id; })[0];
       if (ex) { Object.assign(ex, a); return; }
@@ -195,7 +195,7 @@
     });
     var ids = incoming.map(function (i) { return i.id; });
     items = items.filter(function (i) { return i.source !== 'announcement' || ids.indexOf(i.id) >= 0; });
-    if (added.length || incoming.length) render();
+    if (added.length || incoming.length || items.length !== previousCount) render();
     fresh.forEach(notify);
   });
   render();
