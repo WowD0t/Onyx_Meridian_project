@@ -1,6 +1,6 @@
 window.OM_FORM = {
   provider: 'apps-script',
-  appsScriptEndpoint: '',
+  appsScriptEndpoint: 'https://script.google.com/macros/s/AKfycbwsIArFXtX8LGMkOcB8EC9GB3Sm24XIc9k94fWFZNSbLH5ncEOUsp-fmrC7NsN5eQfFtA/exec',
   appsScriptSiteKey: '',
   fallbackProvider: 'web3forms',
   endpoint: 'https://api.web3forms.com/submit',
