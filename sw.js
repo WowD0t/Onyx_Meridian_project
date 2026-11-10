@@ -1,8 +1,8 @@
 /* Bump this cache name and the asset version for each release. */
-const CACHE = 'om-site-v32';
+const CACHE = 'om-site-v33.0.0';
 const CORE = ['./', './ru-index.html', './en-index.html', './offline.html',
-  './assets-css-style.css?v=32', './assets-css-legacy.css?v=32',
-  './assets-js-app.js?v=32', './assets-js-settings.js?v=32', './manifest.json'];
+  './assets-css-style.css?v=33.0.0', './assets-css-legacy.css?v=33.0.0',
+  './assets-js-app.js?v=33.0.0', './assets-js-settings.js?v=33.0.0', './manifest.json'];
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting()));

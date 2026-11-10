@@ -11,8 +11,8 @@
   var filterWrap = document.getElementById('om-library-filters');
   var countEl = document.getElementById('om-library-count');
   var T = lang === 'ru' ? {
-    empty: 'Медиатека готовится', emptyBody: 'Официальные трейлеры, обзоры и гайды появятся здесь после публикации.',
-    emptyCta: 'Следить за анонсами', chapters: 'Главы', noChapters: 'Главы не заданы', upNext: 'Далее', desc: 'Описание',
+    empty: 'Видео пока нет', emptyBody: 'Здесь появятся трейлеры, обзоры и руководства по нашим проектам.', emptyCta: 'Новости студии', noResults: 'Ничего не найдено', noResultsBody: 'Попробуйте изменить запрос или выбрать другую категорию.', loadError: 'Не удалось загрузить медиатеку', loadErrorBody: 'Проверьте соединение и попробуйте ещё раз.',
+    chapters: 'Главы', noChapters: 'Главы не заданы', upNext: 'Далее', desc: 'Описание',
     play: 'Воспроизвести', pause: 'Пауза', back: '−10 секунд', forward: '+10 секунд', mute: 'Выключить звук', unmute: 'Включить звук',
     volume: 'Громкость', speed: 'Скорость', quality: 'Качество', captions: 'Субтитры', off: 'Выключены', settings: 'Настройки',
     pip: 'Картинка в картинке', theater: 'Кинотеатр', full: 'Полный экран', exitFull: 'Выйти из полного экрана',
@@ -20,17 +20,17 @@
     stats: 'Статистика воспроизведения', accent: 'Акцент плеера', captionSize: 'Размер субтитров', captionBg: 'Фон субтитров',
     playback: 'Воспроизведение', appearance: 'Оформление', shortcuts: 'Клавиши', normal: 'Обычная', large: 'Крупная', small: 'Мелкая',
     none: 'Без фона', semi: 'Полупрозрачный', solid: 'Плотный', resolution: 'Разрешение', buffered: 'Буфер', dropped: 'Потерянные кадры',
-    rate: 'Скорость', source: 'Источник', file: 'Прямой файл', vkNote: 'VK Видео использует встроенный плеер: качество, скорость и звук управляются внутри него.',
-    ytNote: 'YouTube управляет качеством автоматически. Доступны скорость, звук, главы и перемотка.',
-    fileNote: 'Прямой файл: плеер полностью управляет качеством, скоростью, звуком, субтитрами и главами.',
-    error: 'Не удалось загрузить видео', errorBody: 'Проверьте ссылку, CORS и доступность файла. Можно попробовать другой источник.',
+    rate: 'Скорость', source: 'Источник', file: 'Прямой файл', vkNote: 'Управление воспроизведением доступно в плеере VK Видео.',
+    ytNote: 'Качество и параметры воспроизведения зависят от YouTube.',
+    fileNote: 'Доступные настройки зависят от видео.',
+    error: 'Не удалось загрузить видео', errorBody: 'Попробуйте ещё раз или выберите другой источник.',
     retry: 'Повторить', open: 'Открыть источник', loading: 'Загрузка…', noVideos: 'Видео пока нет', search: 'Поиск по медиатеке',
     sort: 'Сортировка', sortNew: 'Сначала новые', sortOld: 'Сначала старые', sortAz: 'По названию', sortDuration: 'По длительности',
     all: 'Все', shown: 'Показано', resume: 'Продолжить с', copied: 'Ссылка скопирована', share: 'Поделиться', next: 'Следующее видео',
     keys: 'Space/K — пауза · J/L — ±10 с · ←/→ — ±5 с · ↑/↓ — громкость · M — звук · F — полный экран · T — кинотеатр · C — субтитры · I — PiP · S — статистика · A — подсветка · ? — клавиши'
   } : {
-    empty: 'The media library is being prepared', emptyBody: 'Official trailers, showcases and guides will appear here after publication.',
-    emptyCta: 'Follow announcements', chapters: 'Chapters', noChapters: 'No chapters defined', upNext: 'Up next', desc: 'Description',
+    empty: 'No videos yet', emptyBody: 'Trailers, showcases and guides for our projects will appear here.', emptyCta: 'Studio news', noResults: 'No results found', noResultsBody: 'Try another search or category.', loadError: 'Could not load the media library', loadErrorBody: 'Check your connection and try again.',
+    chapters: 'Chapters', noChapters: 'No chapters defined', upNext: 'Up next', desc: 'Description',
     play: 'Play', pause: 'Pause', back: '−10 seconds', forward: '+10 seconds', mute: 'Mute', unmute: 'Unmute',
     volume: 'Volume', speed: 'Speed', quality: 'Quality', captions: 'Captions', off: 'Off', settings: 'Settings',
     pip: 'Picture in picture', theater: 'Theater', full: 'Fullscreen', exitFull: 'Exit fullscreen',
@@ -38,10 +38,10 @@
     stats: 'Playback statistics', accent: 'Player accent', captionSize: 'Caption size', captionBg: 'Caption background',
     playback: 'Playback', appearance: 'Appearance', shortcuts: 'Shortcuts', normal: 'Normal', large: 'Large', small: 'Small',
     none: 'None', semi: 'Semi-transparent', solid: 'Solid', resolution: 'Resolution', buffered: 'Buffered', dropped: 'Dropped frames',
-    rate: 'Speed', source: 'Source', file: 'Direct file', vkNote: 'VK Video uses its embedded player: quality, speed and sound are controlled inside it.',
-    ytNote: 'YouTube manages quality automatically. Speed, sound, chapters and seeking are available.',
-    fileNote: 'Direct file: the player fully controls quality, speed, sound, subtitles and chapters.',
-    error: 'Could not load the video', errorBody: 'Check the URL, CORS and file availability. You can try another source.',
+    rate: 'Speed', source: 'Source', file: 'Direct file', vkNote: 'Playback controls are available in the VK Video player.',
+    ytNote: 'Quality and playback options depend on YouTube.',
+    fileNote: 'Available settings depend on the video.',
+    error: 'Could not load the video', errorBody: 'Try again or choose another source.',
     retry: 'Retry', open: 'Open source', loading: 'Loading…', noVideos: 'No videos yet', search: 'Search the media library',
     sort: 'Sort', sortNew: 'Newest first', sortOld: 'Oldest first', sortAz: 'By title', sortDuration: 'By duration',
     all: 'All', shown: 'Showing', resume: 'Resume from', copied: 'Link copied', share: 'Share', next: 'Next video',
@@ -56,7 +56,8 @@
   function savePrefs() { try { localStorage.setItem(PREF_KEY, JSON.stringify(prefs)); } catch (e) {} }
   var videos = [], filtered = [], current = null, source = null, video = null, yt = null, timer = null, hideTimer = null, seekDragging = false, activeFilter = 'all', activeQuery = '', activeSort = 'new';
   mount.className = 'om-player-root';
-  mount.innerHTML = '<div class="om-player-shell"><div class="om-player-topbar"><div class="om-player-now"><span class="om-player-live-dot"></span><span id="om-now-label">' + T.source + '</span></div><div class="om-platform-tabs" id="om-platforms" hidden></div></div><div class="om-player-layout"><div class="om-player-main"><div class="om-player-stage paused" id="om-stage" tabindex="0"><div class="om-player-empty" id="om-empty"><div class="om-empty-visual"><span></span><span></span><span></span><span></span><span></span></div><strong>' + T.empty + '</strong><p>' + T.emptyBody + '</p></div><div class="om-player-error" id="om-error" hidden><strong>' + T.error + '</strong><p>' + T.errorBody + '</p><div class="om-player-error-actions"><button type="button" class="om-player-btn" data-act="retry">' + T.retry + '</button></div></div><div class="om-player-loading" id="om-loading" hidden><i></i><span>' + T.loading + '</span></div><div class="om-player-stats-overlay" id="om-stats-overlay" hidden></div><div class="om-player-menu" id="om-menu" hidden></div></div><div class="om-player-info"><div class="om-player-info-head"><h2 class="om-player-title" id="om-title"></h2><button type="button" class="om-player-share" data-act="share" aria-label="' + T.share + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.7 6.8-3.4M8.6 13.3l6.8 3.4"/></svg></button></div><p class="om-player-desc" id="om-desc"></p><div class="om-player-tags" id="om-tags"></div><div class="om-player-note" id="om-note" hidden></div></div></div><aside class="om-player-side"><div class="om-player-card"><h3>' + T.chapters + '</h3><div id="om-chapters" class="om-chapter-list"></div></div><div class="om-player-card"><h3>' + T.upNext + '</h3><div id="om-side-list" class="om-side-list"></div></div></aside></div></div>';
+  mount.setAttribute('data-state', 'loading');
+  mount.innerHTML = '<div class="om-player-shell"><div class="om-player-topbar"><div class="om-player-now"><span class="om-player-live-dot"></span><span id="om-now-label">' + T.source + '</span></div><div class="om-platform-tabs" id="om-platforms" hidden></div></div><div class="om-player-layout"><div class="om-player-main"><div class="om-player-stage paused" id="om-stage" tabindex="0"><div class="om-player-empty" id="om-empty" role="status"><span class="om-media-empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m10 9 5 3-5 3z"/></svg></span><strong id="om-empty-title">' + T.loading + '</strong><p id="om-empty-body"></p><a class="btn btn-ghost om-media-empty-link" href="' + (lang === 'ru' ? 'ru-index.html#updates' : 'en-index.html#updates') + '" hidden>' + T.emptyCta + '</a><button class="btn btn-ghost om-media-retry" type="button" hidden>' + T.retry + '</button></div><div class="om-player-error" id="om-error" hidden><strong>' + T.error + '</strong><p>' + T.errorBody + '</p><div class="om-player-error-actions"><button type="button" class="om-player-btn" data-act="retry">' + T.retry + '</button></div></div><div class="om-player-loading" id="om-loading" hidden><i></i><span>' + T.loading + '</span></div><div class="om-player-stats-overlay" id="om-stats-overlay" hidden></div><div class="om-player-menu" id="om-menu" hidden></div></div><div class="om-player-info"><div class="om-player-info-head"><h2 class="om-player-title" id="om-title"></h2><button type="button" class="om-player-share" data-act="share" aria-label="' + T.share + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.7 6.8-3.4M8.6 13.3l6.8 3.4"/></svg></button></div><p class="om-player-desc" id="om-desc"></p><div class="om-player-tags" id="om-tags"></div><div class="om-player-note" id="om-note" hidden></div></div></div><aside class="om-player-side"><div class="om-player-card"><h3>' + T.chapters + '</h3><div id="om-chapters" class="om-chapter-list"></div></div><div class="om-player-card"><h3>' + T.upNext + '</h3><div id="om-side-list" class="om-side-list"></div></div></aside></div></div>';
   var stage = mount.querySelector('#om-stage');
   var empty = mount.querySelector('#om-empty');
   var errorBox = mount.querySelector('#om-error');
@@ -100,7 +101,8 @@
   function renderChapters() {
     chaptersEl.innerHTML = '';
     var ch = (current && current.chapters) || [];
-    if (!ch.length) { chaptersEl.innerHTML = '<p class="om-player-muted">' + T.noChapters + '</p>'; return; }
+    chaptersEl.parentElement.hidden = !ch.length;
+    if (!ch.length) return;
     ch.forEach(function (c, i) {
       var b = document.createElement('button');
       b.type = 'button'; b.className = 'om-chapter'; b.dataset.index = String(i);
@@ -138,6 +140,7 @@
     var all = document.createElement('button'); all.type = 'button'; all.className = 'om-filter-chip' + (activeFilter === 'all' ? ' active' : ''); all.textContent = T.all;
     all.addEventListener('click', function () { activeFilter = 'all'; applyLibrary(); });
     filterWrap.appendChild(all);
+    filterWrap.hidden = !Object.keys(tags).length;
     Object.keys(tags).forEach(function (t) {
       var b = document.createElement('button'); b.type = 'button'; b.className = 'om-filter-chip' + (activeFilter === t ? ' active' : ''); b.textContent = t;
       b.addEventListener('click', function () { activeFilter = t; applyLibrary(); });
@@ -150,7 +153,9 @@
     if (activeFilter !== 'all') filtered = filtered.filter(function (v) { return videoTags(v).indexOf(activeFilter) >= 0; });
     if (activeSort === 'az') filtered.sort(function (a, b) { return txt(a, 'title').localeCompare(txt(b, 'title')); });
     else if (activeSort === 'duration') filtered.sort(function (a, b) { return (b.duration || 0) - (a.duration || 0); });
-    else if (activeSort === 'old') filtered.reverse();
+    else if (activeSort === 'old' || activeSort === 'new') {
+      filtered.sort(function (a, b) { var ad = Date.parse(a.published_at || a.date || '') || 0, bd = Date.parse(b.published_at || b.date || '') || 0; return activeSort === 'old' ? ad - bd : bd - ad; });
+    }
     renderCards(library, false);
     renderFilters();
     if (countEl) countEl.textContent = T.shown + ': ' + filtered.length + ' / ' + videos.length;
@@ -158,8 +163,9 @@
   function renderCards(target, compact) {
     if (!target) return;
     target.innerHTML = '';
-    var list = compact ? videos : filtered;
-    if (!list.length) { target.innerHTML = '<div class="om-library-empty"><strong>' + T.noVideos + '</strong><span>' + T.emptyBody + '</span></div>'; return; }
+    var list = compact ? videos.filter(function (v) { return !current || v !== current; }) : filtered;
+    if (compact) { target.parentElement.hidden = !list.length; if (!list.length) return; }
+    if (!list.length) { target.innerHTML = '<div class="om-library-empty"><strong>' + T.noResults + '</strong><span>' + T.noResultsBody + '</span></div>'; return; }
     list.forEach(function (v) {
       var b = document.createElement('button');
       b.type = 'button'; b.className = 'om-video-card' + (current && current.id === v.id ? ' active' : '');
@@ -456,9 +462,11 @@
     videoTags(v).forEach(function (t) { var s = document.createElement('span'); s.className = 'om-player-tag'; s.textContent = t; tagsEl.appendChild(s); });
     renderChapters();
     renderCards(sideList, true);
+    mount.classList.toggle('om-player-no-side', chaptersEl.parentElement.hidden && sideList.parentElement.hidden);
     applyLibrary();
     var s = (v.sources || []).filter(function (x) { return x.platform === 'file'; })[0] || (v.sources || [])[0];
     if (s) playSource(s, false);
+    else { destroy(); empty.style.display = 'none'; errorBox.hidden = false; }
     try { history.replaceState(null, '', '#' + encodeURIComponent(v.id)); } catch (e) {}
   }
   function loadYT(cb) {
@@ -473,17 +481,41 @@
   });
   if (searchInput) searchInput.addEventListener('input', function () { activeQuery = searchInput.value.trim().toLowerCase(); applyLibrary(); });
   if (sortSelect) sortSelect.addEventListener('change', function () { activeSort = sortSelect.value; applyLibrary(); });
-  fetch(root + 'videos.json?ts=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (j) {
-    videos = (j && j.videos) || [];
-    if (j && j.settings && j.settings.accent && !localStorage.getItem(PREF_KEY)) setAccent(j.settings.accent);
-    filtered = videos.slice();
-    applyLibrary();
-    renderCards(sideList, true);
-    var hash = decodeURIComponent(location.hash.replace('#', ''));
-    var initial = videos.filter(function (v) { return v.id === hash; })[0] || videos[0];
-    if (initial) selectVideo(initial);
-    else { empty.style.display = 'flex'; titleEl.textContent = T.empty; descEl.textContent = T.emptyBody; renderChapters(); nowLabel.textContent = T.source; }
-  }).catch(function () { empty.style.display = 'flex'; titleEl.textContent = T.empty; descEl.textContent = T.emptyBody; });
+  function setLibraryState(state) {
+    mount.setAttribute('data-state', state);
+    var section = document.getElementById('library-section');
+    var actions = document.querySelector('.media-actions');
+    if (section) section.hidden = state !== 'ready';
+    if (actions) actions.hidden = state !== 'ready';
+    var emptyTitle = empty.querySelector('#om-empty-title');
+    var emptyBody = empty.querySelector('#om-empty-body');
+    var emptyLink = empty.querySelector('.om-media-empty-link');
+    var retry = empty.querySelector('.om-media-retry');
+    empty.style.display = state === 'ready' ? 'none' : 'flex';
+    emptyTitle.textContent = state === 'loading' ? T.loading : state === 'error' ? T.loadError : T.empty;
+    emptyBody.textContent = state === 'loading' ? '' : state === 'error' ? T.loadErrorBody : T.emptyBody;
+    emptyLink.hidden = state !== 'empty';
+    retry.hidden = state !== 'error';
+    stage.tabIndex = state === 'ready' ? 0 : -1;
+  }
+  function loadVideos() {
+    setLibraryState('loading');
+    fetch(root + 'videos.json?ts=' + Date.now(), { cache: 'no-store' }).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }).then(function (j) {
+      if (!j || !Array.isArray(j.videos)) throw new Error('Invalid video data');
+      videos = j.videos;
+      try { if (j.settings && j.settings.accent && !localStorage.getItem(PREF_KEY)) setAccent(j.settings.accent); } catch (e) {}
+      filtered = videos.slice();
+      if (!videos.length) { setLibraryState('empty'); return; }
+      setLibraryState('ready');
+      applyLibrary();
+      renderCards(sideList, true);
+      var hash = ''; try { hash = decodeURIComponent(location.hash.replace('#', '')); } catch (e) {}
+      var initial = videos.filter(function (v) { return v.id === hash; })[0] || videos[0];
+      selectVideo(initial);
+    }).catch(function () { setLibraryState('error'); });
+  }
+  empty.querySelector('.om-media-retry').addEventListener('click', loadVideos);
+  loadVideos();
   applyPrefs();
   window.OMPlayer = { select: function (id) { var v = videos.filter(function (x) { return x.id === id; })[0]; if (v) selectVideo(v); }, refresh: applyLibrary };
 })();
